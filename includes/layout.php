@@ -4,6 +4,7 @@ require_once __DIR__ . '/auth.php';
 function render_header(string $title): void
 {
     $flash = flash();
+    $user = current_user();
     ?>
     <!doctype html>
     <html lang="fr">
@@ -23,7 +24,15 @@ function render_header(string $title): void
             <a href="demandes.php">Demandes</a>
             <a href="demande_create.php">Créer une demande</a>
             <a href="formations.php">Créneaux</a>
-            <span class="visitor-badge">Accès public</span>
+            <?php if (is_admin($user)): ?>
+                <a href="admin_demandes.php">Gérer les demandes</a>
+                <a href="admin_formations.php">Gérer les créneaux</a>
+                <a href="logout.php">Déconnexion</a>
+                <span class="visitor-badge">Administrateur</span>
+            <?php else: ?>
+                <a href="login.php">Connexion admin</a>
+                <span class="visitor-badge">Accès public</span>
+            <?php endif; ?>
         </nav>
     </header>
 

@@ -23,8 +23,8 @@ function require_login(): array
     $user = current_user();
 
     if (!$user) {
-        flash('Cette page de gestion n’est pas accessible en mode consultation.', 'error');
-        redirect('dashboard.php');
+        flash('Connectez-vous avec un compte administrateur pour accéder à cette page.', 'error');
+        redirect('login.php');
     }
 
     return $user;

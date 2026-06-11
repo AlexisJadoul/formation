@@ -22,7 +22,7 @@ if (!$errors) {
             name VARCHAR(150) NOT NULL,
             email VARCHAR(190) NOT NULL UNIQUE,
             password_hash VARCHAR(255) NOT NULL,
-            role ENUM('admin', 'agent') NOT NULL DEFAULT 'agent',
+            role ENUM('admin') NOT NULL DEFAULT 'admin',
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
 
@@ -67,7 +67,6 @@ if (!$errors) {
         "CREATE TABLE IF NOT EXISTS slot_registrations (
             id INT AUTO_INCREMENT PRIMARY KEY,
             slot_id INT NOT NULL,
-            participant_name VARCHAR(150) NOT NULL,
             participant_email VARCHAR(190) NOT NULL,
             status ENUM('registered', 'cancelled') NOT NULL DEFAULT 'registered',
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
