@@ -7,12 +7,11 @@ $stats['pending_requests'] = db()->query("SELECT COUNT(*) FROM training_requests
 $stats['slots'] = db()->query("SELECT COUNT(*) FROM training_slots WHERE start_at >= NOW()")->fetchColumn();
 
 $stmt = db()->query("
-    SELECT tr.id, tr.title, tr.description, COUNT(rv.id) AS votes
+    SELECT tr.id, tr.title, tr.description,
+        (SELECT COUNT(*) FROM request_interests ri WHERE ri.request_id = tr.id) AS interested
     FROM training_requests tr
-    LEFT JOIN request_votes rv ON rv.request_id = tr.id
     WHERE tr.status = 'approved'
-    GROUP BY tr.id
-    ORDER BY votes DESC, tr.created_at DESC
+    ORDER BY interested DESC, tr.created_at DESC
     LIMIT 5
 ");
 $topRequests = $stmt->fetchAll();
@@ -59,7 +58,7 @@ render_header('Tableau de bord');
             <article class="list-item">
                 <h3><?= e($request['title']) ?></h3>
                 <p><?= e(mb_strimwidth($request['description'], 0, 130, '...')) ?></p>
-                <span class="badge"><?= (int) $request['votes'] ?> vote(s)</span>
+                <span class="badge"><?= (int) $request['interested'] ?> intéressé(s)</span>
             </article>
         <?php endforeach; ?>
     </div>

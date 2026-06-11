@@ -41,21 +41,40 @@ render_header($slot['title']);
     <?php if (strtotime($slot['start_at']) <= time()): ?>
         <div class="alert info">Les inscriptions à ce créneau sont closes.</div>
     <?php elseif ((int) $slot['registered'] >= (int) $slot['capacity']): ?>
-        <div class="alert info">Ce créneau est complet.</div>
-    <?php else: ?>
-        <section class="registration-form" aria-labelledby="registration-title">
-            <h2 id="registration-title">Je m’inscris à cette formation</h2>
-            <form method="post" action="inscription.php" aria-describedby="email-help">
+        <div class="alert info">Ce créneau est complet. Vous pouvez signaler votre intérêt pour être recontacté.</div>
+        <button class="btn secondary" type="button" data-open-dialog="interest-dialog">Je suis intéressé</button>
+
+        <dialog class="email-dialog" id="interest-dialog" aria-labelledby="interest-title">
+            <form method="post" action="interet.php">
                 <input type="hidden" name="slot_id" value="<?= (int) $slot['id'] ?>">
                 <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
+                <div class="dialog-heading">
+                    <h2 id="interest-title">Je suis intéressé</h2>
+                    <button class="dialog-close" type="button" data-close-dialog aria-label="Fermer">×</button>
+                </div>
+                <p>Indiquez votre adresse e-mail pour être recontacté si une place se libère ou si un nouveau créneau est créé.</p>
+                <label for="interest_email">Votre adresse e-mail</label>
+                <input id="interest_email" type="email" name="participant_email" maxlength="190" autocomplete="email" inputmode="email" required>
+                <button class="btn secondary" type="submit">Signaler mon intérêt</button>
+            </form>
+        </dialog>
+    <?php else: ?>
+        <button class="btn" type="button" data-open-dialog="registration-dialog">Je m’inscris</button>
 
-                <label for="participant_email">Votre adresse e-mail</label>
-                <input id="participant_email" type="email" name="participant_email" maxlength="190" autocomplete="email" inputmode="email" aria-describedby="email-help" required>
-                <p class="field-help" id="email-help">Cette adresse permet d’identifier votre inscription et ne sera pas affichée publiquement.</p>
-
+        <dialog class="email-dialog" id="registration-dialog" aria-labelledby="registration-title">
+            <form method="post" action="inscription.php">
+                <input type="hidden" name="slot_id" value="<?= (int) $slot['id'] ?>">
+                <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
+                <div class="dialog-heading">
+                    <h2 id="registration-title">Je m’inscris</h2>
+                    <button class="dialog-close" type="button" data-close-dialog aria-label="Fermer">×</button>
+                </div>
+                <p>Indiquez votre adresse e-mail pour confirmer votre inscription.</p>
+                <label for="registration_email">Votre adresse e-mail</label>
+                <input id="registration_email" type="email" name="participant_email" maxlength="190" autocomplete="email" inputmode="email" required>
                 <button class="btn" type="submit">Je confirme mon inscription</button>
             </form>
-        </section>
+        </dialog>
     <?php endif; ?>
 
 </article>

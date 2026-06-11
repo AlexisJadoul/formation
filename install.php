@@ -49,6 +49,15 @@ if (!$errors) {
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
 
+        "CREATE TABLE IF NOT EXISTS request_interests (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            request_id INT NOT NULL,
+            participant_email VARCHAR(190) NOT NULL,
+            created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY uniq_request_interest_email (request_id, participant_email),
+            FOREIGN KEY (request_id) REFERENCES training_requests(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
         "CREATE TABLE IF NOT EXISTS training_slots (
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(190) NOT NULL,
@@ -71,6 +80,15 @@ if (!$errors) {
             status ENUM('registered', 'cancelled') NOT NULL DEFAULT 'registered',
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             UNIQUE KEY uniq_registration_email (slot_id, participant_email),
+            FOREIGN KEY (slot_id) REFERENCES training_slots(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+        "CREATE TABLE IF NOT EXISTS slot_interests (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            slot_id INT NOT NULL,
+            participant_email VARCHAR(190) NOT NULL,
+            created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY uniq_interest_email (slot_id, participant_email),
             FOREIGN KEY (slot_id) REFERENCES training_slots(id) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
     ];

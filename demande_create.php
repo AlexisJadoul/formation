@@ -53,8 +53,6 @@ render_header('Créer une demande de formation');
 </div>
 
 <section class="card form-card">
-    <p>Votre adresse e-mail suffit pour vous identifier. Elle sera uniquement visible par les administrateurs.</p>
-
     <?php foreach ($errors as $error): ?>
         <div class="alert error"><?= e($error) ?></div>
     <?php endforeach; ?>
@@ -62,16 +60,24 @@ render_header('Créer une demande de formation');
     <form method="post">
         <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
 
-        <label for="requester_email">Votre adresse e-mail</label>
-        <input id="requester_email" name="requester_email" type="email" maxlength="190" autocomplete="email" required value="<?= e($email) ?>">
-
         <label for="title">Formation souhaitée</label>
         <input id="title" name="title" type="text" maxlength="190" required value="<?= e($title) ?>">
 
         <label for="description">Décrivez votre besoin</label>
         <textarea id="description" name="description" rows="7" required><?= e($description) ?></textarea>
 
-        <button class="btn" type="submit">Envoyer ma demande</button>
+        <button class="btn" type="button" data-open-dialog="request-email-dialog">Envoyer ma demande</button>
+
+        <dialog class="email-dialog" id="request-email-dialog" aria-labelledby="request-email-title" <?= $errors ? 'data-open-on-load' : '' ?>>
+            <div class="dialog-heading">
+                <h2 id="request-email-title">Votre adresse e-mail</h2>
+                <button class="dialog-close" type="button" data-close-dialog aria-label="Fermer">×</button>
+            </div>
+            <p>Votre adresse permet de vous identifier et sera uniquement visible par les administrateurs.</p>
+            <label for="requester_email">Votre adresse e-mail</label>
+            <input id="requester_email" name="requester_email" type="email" maxlength="190" autocomplete="email" inputmode="email" required value="<?= e($email) ?>">
+            <button class="btn" type="submit">Confirmer et envoyer</button>
+        </dialog>
     </form>
 </section>
 <?php render_footer(); ?>

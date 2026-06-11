@@ -18,11 +18,6 @@ if (!csrf_is_valid($_POST['csrf_token'] ?? null)) {
     redirect('formation_view.php?id=' . $slotId);
 }
 
-if ($email === '') {
-    flash('Votre adresse e-mail est obligatoire.', 'error');
-    redirect('formation_view.php?id=' . $slotId);
-}
-
 if (!filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($email) > 190) {
     flash('Adresse e-mail invalide.', 'error');
     redirect('formation_view.php?id=' . $slotId);
@@ -45,55 +40,40 @@ try {
 
     if (strtotime($slot['start_at']) <= time()) {
         $pdo->rollBack();
-        flash('Les inscriptions à ce créneau sont closes.', 'error');
+        flash('Ce créneau est déjà passé.', 'error');
         redirect('formation_view.php?id=' . $slotId);
     }
 
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM slot_registrations WHERE slot_id = ? AND status = 'registered'");
     $stmt->execute([$slotId]);
 
-    if ((int) $stmt->fetchColumn() >= (int) $slot['capacity']) {
+    if ((int) $stmt->fetchColumn() < (int) $slot['capacity']) {
         $pdo->rollBack();
-        flash('Ce créneau est complet.', 'error');
+        flash('Des places sont encore disponibles : vous pouvez vous inscrire directement.', 'error');
         redirect('formation_view.php?id=' . $slotId);
     }
 
-    $stmt = $pdo->prepare('SELECT id, status FROM slot_registrations WHERE slot_id = ? AND participant_email = ?');
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM slot_registrations WHERE slot_id = ? AND participant_email = ? AND status = 'registered'");
     $stmt->execute([$slotId, $email]);
-    $registration = $stmt->fetch();
 
-    if ($registration && $registration['status'] === 'registered') {
+    if ((int) $stmt->fetchColumn() > 0) {
         $pdo->rollBack();
-        flash('Cette adresse e-mail est déjà inscrite à ce créneau.', 'error');
+        flash('Cette adresse e-mail est déjà inscrite à cette formation.', 'error');
         redirect('formation_view.php?id=' . $slotId);
     }
 
-    if ($registration) {
-        $stmt = $pdo->prepare("
-            UPDATE slot_registrations
-            SET status = 'registered', created_at = NOW()
-            WHERE id = ?
-        ");
-        $stmt->execute([$registration['id']]);
-    } else {
-        $stmt = $pdo->prepare('
-            INSERT INTO slot_registrations (slot_id, participant_email)
-            VALUES (?, ?)
-        ');
-        $stmt->execute([$slotId, $email]);
-    }
-
-    $stmt = $pdo->prepare('DELETE FROM slot_interests WHERE slot_id = ? AND participant_email = ?');
+    $stmt = $pdo->prepare('INSERT IGNORE INTO slot_interests (slot_id, participant_email) VALUES (?, ?)');
     $stmt->execute([$slotId, $email]);
+    $created = $stmt->rowCount() > 0;
 
     $pdo->commit();
-    flash('Votre inscription à cette formation est confirmée.');
+    flash($created ? 'Votre intérêt pour cette formation a bien été enregistré.' : 'Votre intérêt pour cette formation était déjà enregistré.');
 } catch (Throwable $e) {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
     }
 
-    flash('L’inscription n’a pas pu être enregistrée. Merci de réessayer.', 'error');
+    flash('Votre intérêt n’a pas pu être enregistré. Merci de réessayer.', 'error');
 }
 
 redirect('formation_view.php?id=' . $slotId);
