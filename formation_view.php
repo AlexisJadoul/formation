@@ -38,6 +38,31 @@ render_header($slot['title']);
         <li><strong>Capacité :</strong> <?= (int) $slot['registered'] ?> / <?= (int) $slot['capacity'] ?> inscrit(s)</li>
     </ul>
 
+    <?php if (strtotime($slot['start_at']) <= time()): ?>
+        <div class="alert info">Les inscriptions à ce créneau sont closes.</div>
+    <?php elseif ((int) $slot['registered'] >= (int) $slot['capacity']): ?>
+        <div class="alert info">Ce créneau est complet.</div>
+    <?php else: ?>
+        <section class="registration-form" aria-labelledby="registration-title">
+            <h2 id="registration-title">Inscrire un participant</h2>
+            <p class="small">
+                Aucun compte ni aucune connexion ne sont nécessaires. Saisissez vos coordonnées ou celles de la personne que vous inscrivez.
+            </p>
+            <form method="post" action="inscription.php">
+                <input type="hidden" name="slot_id" value="<?= (int) $slot['id'] ?>">
+                <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
+
+                <label for="participant_name">Nom du participant</label>
+                <input id="participant_name" type="text" name="participant_name" maxlength="150" autocomplete="name" required>
+
+                <label for="participant_email">Adresse email du participant</label>
+                <input id="participant_email" type="email" name="participant_email" maxlength="190" autocomplete="email" required>
+
+                <button class="btn" type="submit">Confirmer l’inscription</button>
+            </form>
+        </section>
+    <?php endif; ?>
+
 </article>
 
 <?php render_footer(); ?>
