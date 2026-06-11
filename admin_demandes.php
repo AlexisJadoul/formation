@@ -17,9 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $stmt = db()->query("
-    SELECT tr.*, u.name, u.email, COUNT(rv.id) AS votes
+    SELECT tr.*, COALESCE(tr.requester_email, u.email) AS email, u.name, COUNT(rv.id) AS votes
     FROM training_requests tr
-    JOIN users u ON u.id = tr.user_id
+    LEFT JOIN users u ON u.id = tr.user_id
     LEFT JOIN request_votes rv ON rv.request_id = tr.id
     GROUP BY tr.id
     ORDER BY tr.status = 'pending' DESC, tr.created_at DESC
@@ -40,7 +40,7 @@ render_header('Administration des demandes');
                 <h2><?= e($request['title']) ?></h2>
                 <p><?= nl2br(e($request['description'])) ?></p>
                 <div class="meta">
-                    <?= e($request['name']) ?> - <?= e($request['email']) ?> -
+                    <?= $request['name'] ? e($request['name']) . ' - ' : '' ?><?= e($request['email']) ?> -
                     statut actuel : <span class="badge"><?= e($request['status']) ?></span> -
                     <?= (int) $request['votes'] ?> vote(s)
                 </div>

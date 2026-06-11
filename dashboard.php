@@ -7,9 +7,8 @@ $stats['pending_requests'] = db()->query("SELECT COUNT(*) FROM training_requests
 $stats['slots'] = db()->query("SELECT COUNT(*) FROM training_slots WHERE start_at >= NOW()")->fetchColumn();
 
 $stmt = db()->query("
-    SELECT tr.id, tr.title, tr.description, u.name, COUNT(rv.id) AS votes
+    SELECT tr.id, tr.title, tr.description, COUNT(rv.id) AS votes
     FROM training_requests tr
-    JOIN users u ON u.id = tr.user_id
     LEFT JOIN request_votes rv ON rv.request_id = tr.id
     WHERE tr.status = 'approved'
     GROUP BY tr.id
@@ -38,7 +37,8 @@ render_header('Tableau de bord');
         puis d'ouvrir des créneaux adaptés aux demandes les plus soutenues.
     </p>
     <div class="actions">
-        <a class="btn" href="demandes.php">Voir les demandes</a>
+        <a class="btn" href="demande_create.php">Créer une demande</a>
+        <a class="btn secondary" href="demandes.php">Voir les demandes</a>
         <a class="btn secondary" href="formations.php">Voir les créneaux</a>
     </div>
 </section>

@@ -1,9 +1,8 @@
 <?php
 require_once __DIR__ . '/includes/layout.php';
 $stmt = db()->query("
-    SELECT tr.*, u.name, COUNT(rv.id) AS votes
+    SELECT tr.*, COUNT(rv.id) AS votes
     FROM training_requests tr
-    JOIN users u ON u.id = tr.user_id
     LEFT JOIN request_votes rv ON rv.request_id = tr.id
     WHERE tr.status = 'approved'
     GROUP BY tr.id
@@ -18,6 +17,7 @@ render_header('Demandes de formation');
         <h1>Demandes de formation</h1>
         <p>Consulte les demandes de formation validées et leur niveau d’intérêt.</p>
     </div>
+    <a class="btn" href="demande_create.php">Créer une demande</a>
 </div>
 
 <div class="card">
@@ -31,8 +31,7 @@ render_header('Demandes de formation');
                 <h2><?= e($request['title']) ?></h2>
                 <p><?= nl2br(e($request['description'])) ?></p>
                 <div class="meta">
-                    Demandé par <?= e($request['name']) ?> -
-                    statut : <span class="badge"><?= e($request['status']) ?></span> -
+                    Statut : <span class="badge"><?= e($request['status']) ?></span> -
                     <?= (int) $request['votes'] ?> vote(s)
                 </div>
 
