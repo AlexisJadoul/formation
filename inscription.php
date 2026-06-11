@@ -6,7 +6,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $slotId = (int) ($_POST['slot_id'] ?? 0);
-$name = trim($_POST['participant_name'] ?? '');
 $email = mb_strtolower(trim($_POST['participant_email'] ?? ''));
 
 if ($slotId < 1) {
@@ -19,13 +18,8 @@ if (!csrf_is_valid($_POST['csrf_token'] ?? null)) {
     redirect('formation_view.php?id=' . $slotId);
 }
 
-if ($name === '' || $email === '') {
-    flash('Votre nom et votre adresse e-mail sont obligatoires.', 'error');
-    redirect('formation_view.php?id=' . $slotId);
-}
-
-if (mb_strlen($name) > 150) {
-    flash('Votre nom ne peut pas dépasser 150 caractères.', 'error');
+if ($email === '') {
+    flash('Votre adresse e-mail est obligatoire.', 'error');
     redirect('formation_view.php?id=' . $slotId);
 }
 
@@ -77,20 +71,20 @@ try {
     if ($registration) {
         $stmt = $pdo->prepare("
             UPDATE slot_registrations
-            SET participant_name = ?, status = 'registered', created_at = NOW()
+            SET status = 'registered', created_at = NOW()
             WHERE id = ?
         ");
-        $stmt->execute([$name, $registration['id']]);
+        $stmt->execute([$registration['id']]);
     } else {
         $stmt = $pdo->prepare('
-            INSERT INTO slot_registrations (slot_id, participant_name, participant_email)
-            VALUES (?, ?, ?)
+            INSERT INTO slot_registrations (slot_id, participant_email)
+            VALUES (?, ?)
         ');
-        $stmt->execute([$slotId, $name, $email]);
+        $stmt->execute([$slotId, $email]);
     }
 
     $pdo->commit();
-    flash('Votre inscription à cette formation est confirmée, ' . $name . '.');
+    flash('Votre inscription à cette formation est confirmée.');
 } catch (Throwable $e) {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();

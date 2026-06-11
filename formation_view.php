@@ -46,14 +46,11 @@ render_header($slot['title']);
         <section class="registration-form" aria-labelledby="registration-title">
             <h2 id="registration-title">Je m’inscris à cette formation</h2>
             <p class="small" id="registration-help">
-                Aucun compte n’est nécessaire. Indiquez votre nom et votre adresse e-mail pour réserver votre place.
+                Aucun compte ni aucune connexion ne sont nécessaires. Votre adresse e-mail suffit pour réserver votre place.
             </p>
             <form method="post" action="inscription.php" aria-describedby="registration-help email-help">
                 <input type="hidden" name="slot_id" value="<?= (int) $slot['id'] ?>">
                 <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
-
-                <label for="participant_name">Votre nom</label>
-                <input id="participant_name" type="text" name="participant_name" maxlength="150" autocomplete="name" required>
 
                 <label for="participant_email">Votre adresse e-mail</label>
                 <input id="participant_email" type="email" name="participant_email" maxlength="190" autocomplete="email" inputmode="email" aria-describedby="email-help" required>
