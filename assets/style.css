@@ -483,6 +483,27 @@ th {
     background: rgba(23, 48, 53, .55);
 }
 
+.dialog-fallback-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    background: rgba(23, 48, 53, .55);
+}
+
+.email-dialog.dialog-fallback-open {
+    position: fixed;
+    inset: 50% auto auto 50%;
+    z-index: 100;
+    max-height: calc(100vh - 32px);
+    margin: 0;
+    overflow-y: auto;
+    transform: translate(-50%, -50%);
+}
+
+body.dialog-open {
+    overflow: hidden;
+}
+
 .email-dialog form {
     margin: 0;
 }

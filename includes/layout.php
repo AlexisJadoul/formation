@@ -50,15 +50,111 @@ function render_footer(): void
         
     </footer>
     <script>
-        document.querySelectorAll('[data-open-dialog]').forEach((button) => {
-            button.addEventListener('click', () => document.getElementById(button.dataset.openDialog)?.showModal());
-        });
+        (function () {
+            var activeDialog = null;
+            var dialogOpener = null;
 
-        document.querySelectorAll('[data-close-dialog]').forEach((button) => {
-            button.addEventListener('click', () => button.closest('dialog')?.close());
-        });
+            function supportsNativeDialog(dialog) {
+                return typeof dialog.showModal === 'function' && typeof dialog.close === 'function';
+            }
 
-        document.querySelectorAll('dialog[data-open-on-load]').forEach((dialog) => dialog.showModal());
+            function openDialog(dialog, opener) {
+                if (!dialog || dialog.hasAttribute('open')) {
+                    return;
+                }
+
+                activeDialog = dialog;
+                dialogOpener = opener || document.activeElement;
+
+                if (supportsNativeDialog(dialog)) {
+                    dialog.showModal();
+                    return;
+                }
+
+                var backdrop = document.createElement('div');
+                backdrop.className = 'dialog-fallback-backdrop';
+                backdrop.setAttribute('data-dialog-backdrop', '');
+                dialog.parentNode.insertBefore(backdrop, dialog);
+                dialog.setAttribute('open', '');
+                dialog.setAttribute('aria-modal', 'true');
+                dialog.classList.add('dialog-fallback-open');
+                document.body.classList.add('dialog-open');
+
+                var focusTarget = dialog.querySelector('input, textarea, select, button, [tabindex]:not([tabindex="-1"])');
+                if (focusTarget) {
+                    focusTarget.focus();
+                }
+            }
+
+            function closeDialog(dialog) {
+                if (!dialog) {
+                    return;
+                }
+
+                if (supportsNativeDialog(dialog) && dialog.hasAttribute('open')) {
+                    dialog.close();
+                } else {
+                    dialog.removeAttribute('open');
+                }
+
+                dialog.removeAttribute('aria-modal');
+                dialog.classList.remove('dialog-fallback-open');
+
+                var backdrop = dialog.previousElementSibling;
+                if (backdrop && backdrop.hasAttribute('data-dialog-backdrop')) {
+                    backdrop.remove();
+                }
+
+                document.body.classList.remove('dialog-open');
+                activeDialog = null;
+
+                if (dialogOpener && typeof dialogOpener.focus === 'function') {
+                    dialogOpener.focus();
+                }
+                dialogOpener = null;
+            }
+
+            document.addEventListener('click', function (event) {
+                var openButton = event.target.closest('[data-open-dialog]');
+                if (openButton) {
+                    openDialog(document.getElementById(openButton.getAttribute('data-open-dialog')), openButton);
+                    return;
+                }
+
+                var closeButton = event.target.closest('[data-close-dialog]');
+                if (closeButton) {
+                    closeDialog(closeButton.closest('dialog'));
+                    return;
+                }
+
+                if (event.target.hasAttribute('data-dialog-backdrop')) {
+                    closeDialog(activeDialog);
+                    return;
+                }
+
+                if (event.target.tagName === 'DIALOG') {
+                    closeDialog(event.target);
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape' && activeDialog && !supportsNativeDialog(activeDialog)) {
+                    event.preventDefault();
+                    closeDialog(activeDialog);
+                }
+            });
+
+            document.querySelectorAll('dialog').forEach(function (dialog) {
+                dialog.addEventListener('cancel', function (event) {
+                    event.preventDefault();
+                    closeDialog(dialog);
+                });
+            });
+
+            document.querySelectorAll('dialog[data-open-on-load]').forEach(function (dialog) {
+                openDialog(dialog, null);
+            });
+        }());
     </script>
     </body>
     </html>
