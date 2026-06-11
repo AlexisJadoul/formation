@@ -11,10 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
 }
 
 $stmt = db()->query("
-    SELECT ts.*, COUNT(sr.id) AS registered
+    SELECT ts.*,
+        (SELECT COUNT(*) FROM slot_registrations sr WHERE sr.slot_id = ts.id AND sr.status = 'registered') AS registered,
+        (SELECT COUNT(*) FROM slot_interests si WHERE si.slot_id = ts.id) AS interested
     FROM training_slots ts
-    LEFT JOIN slot_registrations sr ON sr.slot_id = ts.id AND sr.status = 'registered'
-    GROUP BY ts.id
     ORDER BY ts.start_at DESC
 ");
 $slots = $stmt->fetchAll();
@@ -38,7 +38,8 @@ render_header('Administration des créneaux');
                 <tr>
                     <th>Titre</th>
                     <th>Date</th>
-                    <th>Places</th>
+                    <th>Inscrits</th>
+                    <th>Intéressés</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -48,8 +49,9 @@ render_header('Administration des créneaux');
                         <td><?= e($slot['title']) ?></td>
                         <td><?= date('d/m/Y H:i', strtotime($slot['start_at'])) ?></td>
                         <td><?= (int) $slot['registered'] ?> / <?= (int) $slot['capacity'] ?></td>
+                        <td><?= (int) $slot['interested'] ?></td>
                         <td class="table-actions">
-                            <a class="btn small secondary" href="formation_view.php?id=<?= (int) $slot['id'] ?>">Voir</a>
+                            <a class="btn small secondary" href="admin_formation_view.php?id=<?= (int) $slot['id'] ?>">Voir les participants</a>
                             <a class="btn small" href="formation_edit.php?id=<?= (int) $slot['id'] ?>">Modifier</a>
                             <form method="post" onsubmit="return confirm('Supprimer ce créneau ?');">
                                 <input type="hidden" name="delete_id" value="<?= (int) $slot['id'] ?>">

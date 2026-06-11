@@ -83,6 +83,9 @@ try {
         $stmt->execute([$slotId, $email]);
     }
 
+    $stmt = $pdo->prepare('DELETE FROM slot_interests WHERE slot_id = ? AND participant_email = ?');
+    $stmt->execute([$slotId, $email]);
+
     $pdo->commit();
     flash('Votre inscription à cette formation est confirmée.');
 } catch (Throwable $e) {
