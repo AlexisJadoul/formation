@@ -72,6 +72,15 @@ if (!$errors) {
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             UNIQUE KEY uniq_registration_email (slot_id, participant_email),
             FOREIGN KEY (slot_id) REFERENCES training_slots(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+        "CREATE TABLE IF NOT EXISTS slot_interests (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            slot_id INT NOT NULL,
+            participant_email VARCHAR(190) NOT NULL,
+            created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY uniq_interest_email (slot_id, participant_email),
+            FOREIGN KEY (slot_id) REFERENCES training_slots(id) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
     ];
 
