@@ -1,7 +1,5 @@
 <?php
 require_once __DIR__ . '/includes/layout.php';
-$user = require_login();
-
 $stats = [];
 
 $stats['approved_requests'] = db()->query("SELECT COUNT(*) FROM training_requests WHERE status = 'approved'")->fetchColumn();
@@ -34,13 +32,13 @@ $nextSlots = $stmt->fetchAll();
 render_header('Tableau de bord');
 ?>
 <section class="hero card">
-    <h1>Bienvenue <?= e($user['name']) ?></h1>
+    <h1>Bienvenue sur la plateforme</h1>
     <p>
         Cette plateforme permet de centraliser les besoins de formation, de mesurer l'intérêt des agents,
         puis d'ouvrir des créneaux adaptés aux demandes les plus soutenues.
     </p>
     <div class="actions">
-        <a class="btn" href="demande_create.php">Créer une demande</a>
+        <a class="btn" href="demandes.php">Voir les demandes</a>
         <a class="btn secondary" href="formations.php">Voir les créneaux</a>
     </div>
 </section>

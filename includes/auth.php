@@ -23,8 +23,8 @@ function require_login(): array
     $user = current_user();
 
     if (!$user) {
-        header('Location: login.php');
-        exit;
+        flash('Cette page de gestion n’est pas accessible en mode consultation.', 'error');
+        redirect('dashboard.php');
     }
 
     return $user;

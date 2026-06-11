@@ -1,12 +1,11 @@
 # Plateforme de créneaux de formation
 
-Site PHP/MySQL simple pour :
-- permettre aux agents de créer des demandes de formation ;
-- permettre aux admins de valider ou refuser ces demandes ;
-- rendre les demandes validées visibles aux autres agents ;
-- permettre aux agents de voter pour les demandes qui les intéressent ;
-- permettre aux admins de créer, modifier et supprimer des créneaux de formation ;
-- permettre aux agents de s'inscrire à un créneau existant.
+Site PHP/MySQL simple proposé en consultation publique pour :
+- afficher les demandes de formation validées et leur nombre de votes ;
+- présenter les prochains créneaux de formation et leur taux de remplissage ;
+- consulter le détail de chaque créneau sans compte ni connexion.
+
+Les anciens parcours d’écriture (création de compte, connexion, création de demande, vote et inscription à un créneau) sont désactivés. Les écrans de gestion restent protégés et ne sont pas exposés dans la navigation publique.
 
 ## Installation rapide
 
@@ -17,23 +16,8 @@ Site PHP/MySQL simple pour :
 5. Créer le compte administrateur depuis l'écran d'installation.
 6. Supprimer `install.php` après installation.
 
-## Rôles
+## Accès public en consultation
 
-### Admin
-- voit toutes les demandes ;
-- valide ou refuse les demandes ;
-- crée et modifie les créneaux de formation ;
-- voit les inscriptions.
+Une fois installé, `index.php` ouvre directement le tableau de bord public. Les visiteurs peuvent naviguer sur l’accueil, consulter les demandes validées, voir les créneaux et ouvrir leur détail sans créer de compte ni se connecter.
 
-### Agent
-- crée une demande de formation ;
-- vote pour une demande validée ;
-- consulte les créneaux ;
-- s'inscrit à un créneau.
-
-## Accès
-
-Une fois installé :
-- `login.php` : connexion ;
-- `register.php` : création de compte agent ;
-- `dashboard.php` : tableau de bord.
+La connexion, la création de compte et toutes les actions d’écriture accessibles aux visiteurs (création de demande, vote et inscription à un créneau) sont désactivées. Les pages de gestion restent protégées afin de ne pas exposer les données privées ni les actions administratives.
