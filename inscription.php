@@ -20,17 +20,17 @@ if (!csrf_is_valid($_POST['csrf_token'] ?? null)) {
 }
 
 if ($name === '' || $email === '') {
-    flash('Le nom et l’adresse email du participant sont obligatoires.', 'error');
+    flash('Votre nom et votre adresse e-mail sont obligatoires.', 'error');
     redirect('formation_view.php?id=' . $slotId);
 }
 
 if (mb_strlen($name) > 150) {
-    flash('Le nom du participant ne peut pas dépasser 150 caractères.', 'error');
+    flash('Votre nom ne peut pas dépasser 150 caractères.', 'error');
     redirect('formation_view.php?id=' . $slotId);
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($email) > 190) {
-    flash('Adresse email invalide.', 'error');
+    flash('Adresse e-mail invalide.', 'error');
     redirect('formation_view.php?id=' . $slotId);
 }
 
@@ -70,7 +70,7 @@ try {
 
     if ($registration && $registration['status'] === 'registered') {
         $pdo->rollBack();
-        flash('Cette adresse email est déjà inscrite à ce créneau.', 'error');
+        flash('Cette adresse e-mail est déjà inscrite à ce créneau.', 'error');
         redirect('formation_view.php?id=' . $slotId);
     }
 
@@ -90,7 +90,7 @@ try {
     }
 
     $pdo->commit();
-    flash('Inscription enregistrée pour ' . $name . '.');
+    flash('Votre inscription à cette formation est confirmée, ' . $name . '.');
 } catch (Throwable $e) {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();

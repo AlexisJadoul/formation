@@ -4,7 +4,7 @@ Site PHP/MySQL simple proposé en consultation publique pour :
 - afficher les demandes de formation validées et leur nombre de votes ;
 - présenter les prochains créneaux de formation et leur taux de remplissage ;
 - consulter le détail de chaque créneau sans compte ni connexion ;
-- inscrire un participant à un créneau avec son nom et son adresse email, sans connexion.
+- permettre à chaque visiteur de s’inscrire à un créneau avec son nom et son adresse e-mail, sans connexion.
 
 Les parcours de création de compte, de connexion, de création de demande et de vote sont désactivés. L’inscription publique aux créneaux reste disponible. Les écrans de gestion restent protégés et ne sont pas exposés dans la navigation publique.
 
@@ -21,6 +21,6 @@ Pour mettre à jour une installation existante, exécuter une seule fois `migrat
 
 ## Accès public en consultation
 
-Une fois installé, `index.php` ouvre directement le tableau de bord public. Les visiteurs peuvent naviguer sur l’accueil, consulter les demandes validées, voir les créneaux, ouvrir leur détail et inscrire un participant sans créer de compte ni se connecter. Le formulaire accepte le nom et l’adresse email de la personne concernée, ce qui permet également d’inscrire quelqu’un d’autre.
+Une fois installé, `index.php` ouvre directement le tableau de bord public. Les visiteurs peuvent naviguer sur l’accueil, consulter les demandes validées, voir les créneaux, ouvrir leur détail et inscrire un participant sans créer de compte ni se connecter. Le formulaire d’inscription demande le nom et l’adresse e-mail du visiteur. L’adresse e-mail identifie son inscription, empêche une double inscription au même créneau et n’est jamais affichée sur les pages publiques.
 
 La connexion, la création de compte, la création de demande et le vote sont désactivés. Les pages de gestion restent protégées afin de ne pas exposer les données privées ni les actions administratives.

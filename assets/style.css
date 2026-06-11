@@ -431,3 +431,9 @@ th {
 .registration-form h2 {
     margin: 0 0 4px;
 }
+
+.field-help {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
