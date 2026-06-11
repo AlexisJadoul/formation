@@ -15,7 +15,7 @@ render_header('Créneaux de formation');
 <div class="page-title">
     <div>
         <h1>Créneaux de formation</h1>
-        <p>Consulte librement les créneaux de formation proposés.</p>
+        <p>Consulte les créneaux proposés et inscris un participant sans créer de compte.</p>
     </div>
 </div>
 
@@ -35,7 +35,7 @@ render_header('Créneaux de formation');
                 Places : <?= (int) $slot['registered'] ?> / <?= (int) $slot['capacity'] ?>
             </div>
 
-            <a class="btn small secondary" href="formation_view.php?id=<?= (int) $slot['id'] ?>">Voir le détail</a>
+            <a class="btn small secondary" href="formation_view.php?id=<?= (int) $slot['id'] ?>">Voir et s’inscrire</a>
         </article>
     <?php endforeach; ?>
 </div>

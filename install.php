@@ -66,12 +66,12 @@ if (!$errors) {
         "CREATE TABLE IF NOT EXISTS slot_registrations (
             id INT AUTO_INCREMENT PRIMARY KEY,
             slot_id INT NOT NULL,
-            user_id INT NOT NULL,
+            participant_name VARCHAR(150) NOT NULL,
+            participant_email VARCHAR(190) NOT NULL,
             status ENUM('registered', 'cancelled') NOT NULL DEFAULT 'registered',
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            UNIQUE KEY uniq_registration (slot_id, user_id),
-            FOREIGN KEY (slot_id) REFERENCES training_slots(id) ON DELETE CASCADE,
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            UNIQUE KEY uniq_registration_email (slot_id, participant_email),
+            FOREIGN KEY (slot_id) REFERENCES training_slots(id) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
     ];
 
