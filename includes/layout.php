@@ -30,7 +30,6 @@ function render_header(string $title): void
                 <a href="logout.php">Déconnexion</a>
                 <span class="visitor-badge">Administrateur</span>
             <?php else: ?>
-                <a href="login.php">Connexion admin</a>
                 <span class="visitor-badge">Accès public</span>
             <?php endif; ?>
         </nav>
