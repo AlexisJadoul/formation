@@ -3,7 +3,6 @@ require_once __DIR__ . '/auth.php';
 
 function render_header(string $title): void
 {
-    $user = current_user();
     $flash = flash();
     ?>
     <!doctype html>
@@ -20,19 +19,10 @@ function render_header(string $title): void
             <a href="dashboard.php"><?= e(APP_NAME) ?></a>
         </div>
         <nav>
-            <?php if ($user): ?>
-                <a href="dashboard.php">Accueil</a>
-                <a href="demandes.php">Demandes</a>
-                <a href="formations.php">Créneaux</a>
-                <?php if (is_admin($user)): ?>
-                    <a href="admin_demandes.php">Admin demandes</a>
-                    <a href="admin_formations.php">Admin créneaux</a>
-                <?php endif; ?>
-                <a href="logout.php">Déconnexion</a>
-            <?php else: ?>
-                <a href="login.php">Connexion</a>
-                <a href="register.php">Créer un compte</a>
-            <?php endif; ?>
+            <a href="dashboard.php">Accueil</a>
+            <a href="demandes.php">Demandes</a>
+            <a href="formations.php">Créneaux</a>
+            <span class="visitor-badge">Mode consultation</span>
         </nav>
     </header>
 

@@ -124,8 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$errors) {
         <?php endforeach; ?>
 
         <?php if ($success): ?>
-            <div class="alert success">Installation terminée. Tu peux maintenant supprimer install.php et te connecter.</div>
-            <a class="btn" href="login.php">Aller à la connexion</a>
+            <div class="alert success">Installation terminée. Tu peux maintenant supprimer install.php et consulter la plateforme.</div>
+            <a class="btn" href="dashboard.php">Voir la plateforme</a>
         <?php else: ?>
             <form method="post">
                 <label>Nom</label>
