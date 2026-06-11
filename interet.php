@@ -28,7 +28,7 @@ $pdo = db();
 try {
     $pdo->beginTransaction();
 
-    $stmt = $pdo->prepare('SELECT id, start_at FROM training_slots WHERE id = ? FOR UPDATE');
+    $stmt = $pdo->prepare('SELECT id, capacity, start_at FROM training_slots WHERE id = ? FOR UPDATE');
     $stmt->execute([$slotId]);
     $slot = $stmt->fetch();
 
@@ -41,6 +41,15 @@ try {
     if (strtotime($slot['start_at']) <= time()) {
         $pdo->rollBack();
         flash('Ce créneau est déjà passé.', 'error');
+        redirect('formation_view.php?id=' . $slotId);
+    }
+
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM slot_registrations WHERE slot_id = ? AND status = 'registered'");
+    $stmt->execute([$slotId]);
+
+    if ((int) $stmt->fetchColumn() < (int) $slot['capacity']) {
+        $pdo->rollBack();
+        flash('Des places sont encore disponibles : vous pouvez vous inscrire directement.', 'error');
         redirect('formation_view.php?id=' . $slotId);
     }
 

@@ -17,14 +17,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $stmt = db()->query("
-    SELECT tr.*, COALESCE(tr.requester_email, u.email) AS email, u.name, COUNT(rv.id) AS votes
+    SELECT tr.*, COALESCE(tr.requester_email, u.email) AS email, u.name,
+        (SELECT COUNT(*) FROM request_interests ri WHERE ri.request_id = tr.id) AS interested
     FROM training_requests tr
     LEFT JOIN users u ON u.id = tr.user_id
-    LEFT JOIN request_votes rv ON rv.request_id = tr.id
-    GROUP BY tr.id
     ORDER BY tr.status = 'pending' DESC, tr.created_at DESC
 ");
 $requests = $stmt->fetchAll();
+
+$interestsByRequest = [];
+$stmt = db()->query('SELECT request_id, participant_email, created_at FROM request_interests ORDER BY created_at ASC');
+foreach ($stmt->fetchAll() as $interest) {
+    $interestsByRequest[$interest['request_id']][] = $interest;
+}
 
 render_header('Administration des demandes');
 ?>
@@ -42,8 +47,22 @@ render_header('Administration des demandes');
                 <div class="meta">
                     <?= $request['name'] ? e($request['name']) . ' - ' : '' ?><?= e($request['email']) ?> -
                     statut actuel : <span class="badge"><?= e($request['status']) ?></span> -
-                    <?= (int) $request['votes'] ?> vote(s)
+                    <?= (int) $request['interested'] ?> personne(s) intéressée(s)
                 </div>
+                <?php if ($request['status'] === 'approved'): ?>
+                    <details class="interest-details">
+                        <summary>Voir les personnes intéressées (<?= (int) $request['interested'] ?>)</summary>
+                        <?php if (empty($interestsByRequest[$request['id']])): ?>
+                            <p class="small">Personne n’a encore signalé son intérêt.</p>
+                        <?php else: ?>
+                            <ul>
+                                <?php foreach ($interestsByRequest[$request['id']] as $interest): ?>
+                                    <li><a href="mailto:<?= e($interest['participant_email']) ?>"><?= e($interest['participant_email']) ?></a> — <?= date('d/m/Y H:i', strtotime($interest['created_at'])) ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                    </details>
+                <?php endif; ?>
             </div>
 
             <form method="post" class="inline-form">

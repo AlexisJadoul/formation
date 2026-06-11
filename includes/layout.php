@@ -49,6 +49,17 @@ function render_footer(): void
     <footer class="footer">
         
     </footer>
+    <script>
+        document.querySelectorAll('[data-open-dialog]').forEach((button) => {
+            button.addEventListener('click', () => document.getElementById(button.dataset.openDialog)?.showModal());
+        });
+
+        document.querySelectorAll('[data-close-dialog]').forEach((button) => {
+            button.addEventListener('click', () => button.closest('dialog')?.close());
+        });
+
+        document.querySelectorAll('dialog[data-open-on-load]').forEach((dialog) => dialog.showModal());
+    </script>
     </body>
     </html>
     <?php

@@ -469,3 +469,59 @@ th {
         overflow-x: auto;
     }
 }
+
+.email-dialog {
+    width: min(520px, calc(100% - 32px));
+    border: 0;
+    border-radius: 18px;
+    padding: 24px;
+    color: var(--text);
+    box-shadow: 0 24px 70px rgba(23, 48, 53, .28);
+}
+
+.email-dialog::backdrop {
+    background: rgba(23, 48, 53, .55);
+}
+
+.email-dialog form {
+    margin: 0;
+}
+
+.dialog-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.dialog-heading h2 {
+    margin: 0;
+}
+
+.dialog-close {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 30px;
+    line-height: 1;
+    padding: 0 4px;
+}
+
+.interest-details {
+    margin-top: 14px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #f8fbfc;
+}
+
+.interest-details summary {
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.interest-details ul {
+    margin-bottom: 0;
+    padding-left: 20px;
+}
