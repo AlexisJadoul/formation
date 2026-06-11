@@ -21,8 +21,9 @@ function render_header(string $title): void
         <nav>
             <a href="dashboard.php">Accueil</a>
             <a href="demandes.php">Demandes</a>
+            <a href="demande_create.php">Créer une demande</a>
             <a href="formations.php">Créneaux</a>
-            <span class="visitor-badge">Mode consultation</span>
+            <span class="visitor-badge">Accès public</span>
         </nav>
     </header>
 

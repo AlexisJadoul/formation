@@ -28,7 +28,8 @@ if (!$errors) {
 
         "CREATE TABLE IF NOT EXISTS training_requests (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL,
+            user_id INT NULL,
+            requester_email VARCHAR(190) NOT NULL,
             title VARCHAR(190) NOT NULL,
             description TEXT NOT NULL,
             status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',

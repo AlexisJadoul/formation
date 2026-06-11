@@ -4,9 +4,10 @@ Site PHP/MySQL simple proposé en consultation publique pour :
 - afficher les demandes de formation validées et leur nombre de votes ;
 - présenter les prochains créneaux de formation et leur taux de remplissage ;
 - consulter le détail de chaque créneau sans compte ni connexion ;
+- permettre à chaque visiteur de créer une demande de formation avec sa seule adresse e-mail, sans connexion ;
 - permettre à chaque visiteur de s’inscrire à un créneau avec son nom et son adresse e-mail, sans connexion.
 
-Les parcours de création de compte, de connexion, de création de demande et de vote sont désactivés. L’inscription publique aux créneaux reste disponible. Les écrans de gestion restent protégés et ne sont pas exposés dans la navigation publique.
+Les parcours de création de compte, de connexion et de vote sont désactivés. La création publique de demandes et l’inscription publique aux créneaux restent disponibles. Les écrans de gestion restent protégés et ne sont pas exposés dans la navigation publique.
 
 ## Installation rapide
 
@@ -17,10 +18,10 @@ Les parcours de création de compte, de connexion, de création de demande et de
 5. Créer le compte administrateur depuis l'écran d'installation.
 6. Supprimer `install.php` après installation.
 
-Pour mettre à jour une installation existante, exécuter une seule fois `migrations/20260611_public_registrations.sql` sur la base de données avant de publier les nouveaux fichiers.
+Pour mettre à jour une installation existante, exécuter une seule fois `migrations/20260611_public_registrations.sql`, puis `migrations/20260611_public_training_requests.sql`, sur la base de données avant de publier les nouveaux fichiers.
 
-## Accès public en consultation
+## Accès public
 
-Une fois installé, `index.php` ouvre directement le tableau de bord public. Les visiteurs peuvent naviguer sur l’accueil, consulter les demandes validées, voir les créneaux, ouvrir leur détail et inscrire un participant sans créer de compte ni se connecter. Le formulaire d’inscription demande le nom et l’adresse e-mail du visiteur. L’adresse e-mail identifie son inscription, empêche une double inscription au même créneau et n’est jamais affichée sur les pages publiques.
+Une fois installé, `index.php` ouvre directement le tableau de bord public. Les visiteurs peuvent naviguer sur l’accueil, consulter les demandes validées, créer une demande, voir les créneaux, ouvrir leur détail et inscrire un participant sans créer de compte ni se connecter. La création d’une demande nécessite uniquement une adresse e-mail, qui identifie son auteur et reste visible seulement par les administrateurs. Le formulaire d’inscription demande le nom et l’adresse e-mail du visiteur. L’adresse e-mail identifie son inscription, empêche une double inscription au même créneau et n’est jamais affichée sur les pages publiques.
 
-La connexion, la création de compte, la création de demande et le vote sont désactivés. Les pages de gestion restent protégées afin de ne pas exposer les données privées ni les actions administratives.
+La connexion, la création de compte et le vote sont désactivés. Les pages de gestion restent protégées afin de ne pas exposer les données privées ni les actions administratives.
