@@ -94,11 +94,9 @@ render_header($slot['title']);
         </div>
     <?php endif; ?>
 
-    <?php if ($isAdmin): ?>
-        <div class="alert info">Les inscriptions sont accessibles uniquement depuis l’accès public.</div>
-    <?php elseif (strtotime($slot['start_at']) <= time()): ?>
+    <?php if (!$isAdmin && strtotime($slot['start_at']) <= time()): ?>
         <div class="alert info">Les inscriptions à ce créneau sont closes.</div>
-    <?php elseif ((int) $slot['registered'] >= (int) $slot['capacity']): ?>
+    <?php elseif (!$isAdmin && (int) $slot['registered'] >= (int) $slot['capacity']): ?>
         <div class="alert info">Ce créneau est complet. Vous pouvez signaler votre intérêt pour être recontacté.</div>
         <button class="btn secondary" type="button" data-open-dialog="interest-dialog">Je suis intéressé</button>
 
@@ -116,7 +114,7 @@ render_header($slot['title']);
                 <button class="btn secondary" type="submit">Signaler mon intérêt</button>
             </form>
         </dialog>
-    <?php else: ?>
+    <?php elseif (!$isAdmin): ?>
         <button class="btn" type="button" data-open-dialog="registration-dialog">Je m’inscris</button>
 
         <dialog class="email-dialog" id="registration-dialog" aria-labelledby="registration-title">
