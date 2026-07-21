@@ -50,8 +50,8 @@ render_header($slot['title']);
 
     <?php if ((int) ($_SESSION['calendar_slot_id'] ?? 0) === (int) $slot['id']): ?>
         <div class="calendar-invitation">
-            <p><strong>Votre inscription est confirmée.</strong> Ajoutez maintenant ce créneau dans Outlook, sans téléchargement.</p>
-            <a class="btn" href="<?= e($outlookUrl) ?>" target="_blank" rel="noopener noreferrer">Ajouter dans Outlook en ligne</a>
+            <p><strong>Votre inscription est confirmée.</strong> Ajoutez maintenant ce créneau dans Outlook.</p>
+            <a class="btn" href="<?= e($outlookUrl) ?>" target="_blank" rel="noopener noreferrer">Ajouter dans Outlook</a>
         </div>
     <?php endif; ?>
 
