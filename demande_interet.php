@@ -7,15 +7,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $requestId = (int) ($_POST['request_id'] ?? 0);
 $email = mb_strtolower(trim($_POST['participant_email'] ?? ''));
+$destination = ($_POST['return_to'] ?? '') === 'dashboard.php' ? 'dashboard.php' : 'demandes.php';
 
 if (!csrf_is_valid($_POST['csrf_token'] ?? null)) {
     flash('Le formulaire a expiré. Merci de réessayer.', 'error');
-    redirect('demandes.php');
+    redirect($destination);
 }
 
 if ($requestId < 1 || !filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($email) > 190) {
     flash('Adresse e-mail ou demande invalide.', 'error');
-    redirect('demandes.php');
+    redirect($destination);
 }
 
 try {
@@ -24,7 +25,7 @@ try {
 
     if (!$stmt->fetch()) {
         flash('Cette demande n’est pas disponible.', 'error');
-        redirect('demandes.php');
+        redirect($destination);
     }
 
     $stmt = db()->prepare('INSERT IGNORE INTO request_interests (request_id, participant_email) VALUES (?, ?)');
@@ -34,4 +35,4 @@ try {
     flash('Votre intérêt n’a pas pu être enregistré. Merci de réessayer.', 'error');
 }
 
-redirect('demandes.php');
+redirect($destination);
