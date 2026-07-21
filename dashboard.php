@@ -55,11 +55,12 @@ render_header('Tableau de bord');
             <p>Aucune demande validée pour le moment.</p>
         <?php endif; ?>
         <?php foreach ($topRequests as $request): ?>
-            <article class="list-item">
+            <a class="list-item dashboard-list-link" href="demandes.php?interest=<?= (int) $request['id'] ?>#demande-<?= (int) $request['id'] ?>" aria-label="Consulter et soutenir la demande <?= e($request['title']) ?>">
                 <h3><?= e($request['title']) ?></h3>
                 <p><?= e(mb_strimwidth($request['description'], 0, 130, '...')) ?></p>
                 <span class="badge"><?= (int) $request['interested'] ?> intéressé(s)</span>
-            </article>
+                <span class="list-item-action">Consulter et soutenir <span aria-hidden="true">→</span></span>
+            </a>
         <?php endforeach; ?>
     </div>
 
@@ -69,11 +70,12 @@ render_header('Tableau de bord');
             <p>Aucun créneau à venir.</p>
         <?php endif; ?>
         <?php foreach ($nextSlots as $slot): ?>
-            <article class="list-item">
-                <h3><a href="formation_view.php?id=<?= (int) $slot['id'] ?>"><?= e($slot['title']) ?></a></h3>
+            <a class="list-item dashboard-list-link" href="formation_view.php?id=<?= (int) $slot['id'] ?>" aria-label="Consulter le créneau <?= e($slot['title']) ?>">
+                <h3><?= e($slot['title']) ?></h3>
                 <p><?= date('d/m/Y H:i', strtotime($slot['start_at'])) ?> - <?= date('H:i', strtotime($slot['end_at'])) ?></p>
                 <span class="badge"><?= (int) $slot['registered'] ?> / <?= (int) $slot['capacity'] ?> inscrit(s)</span>
-            </article>
+                <span class="list-item-action">Voir le créneau et s’inscrire <span aria-hidden="true">→</span></span>
+            </a>
         <?php endforeach; ?>
     </div>
 </section>

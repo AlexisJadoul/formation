@@ -230,6 +230,57 @@ select:focus-visible {
     border-top: 0;
 }
 
+.dashboard-list-link {
+    position: relative;
+    display: block;
+    margin: 8px -12px 0;
+    padding: 18px 46px 18px 12px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    color: var(--text);
+    cursor: pointer;
+    transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.dashboard-list-link:first-of-type {
+    border-top: 1px solid transparent;
+}
+
+.dashboard-list-link:hover {
+    background: var(--primary-soft);
+    border-color: #a9d7de;
+    box-shadow: 0 5px 14px rgba(0, 90, 102, .12);
+    text-decoration: none;
+    transform: translateY(-2px);
+}
+
+.dashboard-list-link:focus-visible {
+    outline: 3px solid rgba(0, 122, 136, .25);
+    outline-offset: 2px;
+}
+
+.dashboard-list-link h3 {
+    color: var(--primary-dark);
+    margin-top: 0;
+}
+
+.list-item-action {
+    display: block;
+    margin-top: 12px;
+    color: var(--primary-dark);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.dashboard-list-link .list-item-action > span {
+    display: inline-block;
+    transition: transform .18s ease;
+}
+
+.dashboard-list-link:hover .list-item-action > span {
+    transform: translateX(4px);
+}
+
 .list-item h3,
 .request-card h2,
 .slot-card h2 {

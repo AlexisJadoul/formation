@@ -8,6 +8,7 @@ $stmt = db()->query("
     ORDER BY interested DESC, tr.created_at DESC
 ");
 $requests = $stmt->fetchAll();
+$requestedInterestId = filter_input(INPUT_GET, 'interest', FILTER_VALIDATE_INT) ?: 0;
 
 render_header('Demandes de formation');
 ?>
@@ -25,7 +26,7 @@ render_header('Demandes de formation');
     <?php endif; ?>
 
     <?php foreach ($requests as $request): ?>
-        <article class="request-card">
+        <article class="request-card" id="demande-<?= (int) $request['id'] ?>">
             <div>
                 <h2><?= e($request['title']) ?></h2>
                 <p><?= nl2br(e($request['description'])) ?></p>
@@ -43,7 +44,7 @@ render_header('Demandes de formation');
             </div>
         </article>
 
-        <dialog class="email-dialog" id="request-interest-<?= (int) $request['id'] ?>" aria-labelledby="request-interest-title-<?= (int) $request['id'] ?>">
+        <dialog class="email-dialog" id="request-interest-<?= (int) $request['id'] ?>" aria-labelledby="request-interest-title-<?= (int) $request['id'] ?>"<?= $requestedInterestId === (int) $request['id'] ? ' data-open-on-load' : '' ?>>
             <form method="post" action="demande_interet.php">
                 <input type="hidden" name="request_id" value="<?= (int) $request['id'] ?>">
                 <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
