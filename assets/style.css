@@ -281,6 +281,72 @@ select:focus-visible {
     transform: translateX(4px);
 }
 
+.dashboard-panel > h2 {
+    margin-bottom: 18px;
+}
+
+.dashboard-request-card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    margin-top: 14px;
+    background: #fff;
+    transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.dashboard-request-card:hover {
+    border-color: #a9d7de;
+    box-shadow: 0 5px 14px rgba(0, 90, 102, .12);
+    transform: translateY(-2px);
+}
+
+.dashboard-request-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    color: var(--primary-dark);
+}
+
+.dashboard-request-details:hover {
+    text-decoration: none;
+}
+
+.dashboard-request-details:focus-visible {
+    outline: 3px solid rgba(0, 122, 136, .25);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+.dashboard-request-details h3 {
+    margin: 0;
+}
+
+.dashboard-request-arrow {
+    font-size: 22px;
+    transition: transform .18s ease;
+}
+
+.dashboard-request-details:hover .dashboard-request-arrow {
+    transform: translateX(4px);
+}
+
+.dashboard-request-card > p {
+    margin: 10px 0 14px;
+}
+
+.dashboard-request-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.dashboard-request-footer .btn {
+    margin-top: 0;
+}
+
 .list-item h3,
 .request-card h2,
 .slot-card h2 {

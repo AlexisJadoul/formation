@@ -49,18 +49,39 @@ render_header('Tableau de bord');
 </section>
 
 <section class="grid two">
-    <div class="card">
+    <div class="card dashboard-panel">
         <h2>Demandes les plus soutenues</h2>
         <?php if (!$topRequests): ?>
             <p>Aucune demande validée pour le moment.</p>
         <?php endif; ?>
         <?php foreach ($topRequests as $request): ?>
-            <a class="list-item dashboard-list-link" href="demandes.php?interest=<?= (int) $request['id'] ?>#demande-<?= (int) $request['id'] ?>" aria-label="Consulter et soutenir la demande <?= e($request['title']) ?>">
-                <h3><?= e($request['title']) ?></h3>
+            <article class="dashboard-request-card">
+                <a class="dashboard-request-details" href="demandes.php#demande-<?= (int) $request['id'] ?>" aria-label="Voir les détails de la demande <?= e($request['title']) ?>">
+                    <h3><?= e($request['title']) ?></h3>
+                    <span class="dashboard-request-arrow" aria-hidden="true">→</span>
+                </a>
                 <p><?= e(mb_strimwidth($request['description'], 0, 130, '...')) ?></p>
-                <span class="badge"><?= (int) $request['interested'] ?> intéressé(s)</span>
-                <span class="list-item-action">Consulter et soutenir <span aria-hidden="true">→</span></span>
-            </a>
+                <div class="dashboard-request-footer">
+                    <span class="badge"><?= (int) $request['interested'] ?> intéressé(s)</span>
+                    <button class="btn small secondary" type="button" data-open-dialog="dashboard-request-interest-<?= (int) $request['id'] ?>">Je suis intéressé</button>
+                </div>
+            </article>
+
+            <dialog class="email-dialog" id="dashboard-request-interest-<?= (int) $request['id'] ?>" aria-labelledby="dashboard-request-interest-title-<?= (int) $request['id'] ?>">
+                <form method="post" action="demande_interet.php">
+                    <input type="hidden" name="request_id" value="<?= (int) $request['id'] ?>">
+                    <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="return_to" value="dashboard.php">
+                    <div class="dialog-heading">
+                        <h2 id="dashboard-request-interest-title-<?= (int) $request['id'] ?>">Je suis intéressé</h2>
+                        <button class="dialog-close" type="button" data-close-dialog aria-label="Fermer">×</button>
+                    </div>
+                    <p><strong><?= e($request['title']) ?></strong></p>
+                    <label for="dashboard-request-interest-email-<?= (int) $request['id'] ?>">Votre adresse e-mail</label>
+                    <input id="dashboard-request-interest-email-<?= (int) $request['id'] ?>" type="email" name="participant_email" maxlength="190" autocomplete="email" inputmode="email" required>
+                    <button class="btn secondary" type="submit">Signaler mon intérêt</button>
+                </form>
+            </dialog>
         <?php endforeach; ?>
     </div>
 
