@@ -17,6 +17,19 @@ if (!$slot) {
     exit('Créneau introuvable.');
 }
 
+$isAdmin = is_admin();
+$registrations = [];
+if ($isAdmin) {
+    $stmt = db()->prepare("
+        SELECT participant_email, created_at
+        FROM slot_registrations
+        WHERE slot_id = ? AND status = 'registered'
+        ORDER BY created_at ASC
+    ");
+    $stmt->execute([$id]);
+    $registrations = $stmt->fetchAll();
+}
+
 $outlookUrl = 'https://outlook.office.com/calendar/0/deeplink/compose?' . http_build_query([
     'path' => '/calendar/action/compose',
     'rru' => 'addevent',
@@ -47,6 +60,32 @@ render_header($slot['title']);
         <li><strong>Lieu :</strong> <?= e($slot['location'] ?: 'Non précisé') ?></li>
         <li><strong>Capacité :</strong> <?= (int) $slot['registered'] ?> / <?= (int) $slot['capacity'] ?> inscrit(s)</li>
     </ul>
+
+    <?php if ($isAdmin): ?>
+        <section class="admin-participants">
+            <h2>Participants inscrits <span class="badge"><?= count($registrations) ?></span></h2>
+            <?php if (!$registrations): ?>
+                <p>Aucune inscription pour le moment.</p>
+            <?php else: ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Adresse e-mail</th>
+                            <th>Inscrit le</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($registrations as $registration): ?>
+                            <tr>
+                                <td><a href="mailto:<?= e($registration['participant_email']) ?>"><?= e($registration['participant_email']) ?></a></td>
+                                <td><?= date('d/m/Y H:i', strtotime($registration['created_at'])) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </section>
+    <?php endif; ?>
 
     <?php if ((int) ($_SESSION['calendar_slot_id'] ?? 0) === (int) $slot['id']): ?>
         <div class="calendar-invitation">
