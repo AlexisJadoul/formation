@@ -87,6 +87,7 @@ try {
     $stmt->execute([$slotId, $email]);
 
     $pdo->commit();
+    $_SESSION['calendar_slot_id'] = $slotId;
     flash('Votre inscription à cette formation est confirmée.');
 } catch (Throwable $e) {
     if ($pdo->inTransaction()) {

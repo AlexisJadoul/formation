@@ -38,6 +38,13 @@ render_header($slot['title']);
         <li><strong>Capacité :</strong> <?= (int) $slot['registered'] ?> / <?= (int) $slot['capacity'] ?> inscrit(s)</li>
     </ul>
 
+    <?php if ((int) ($_SESSION['calendar_slot_id'] ?? 0) === (int) $slot['id']): ?>
+        <div class="calendar-invitation">
+            <p><strong>Votre inscription est confirmée.</strong> Téléchargez l’invitation pour ajouter ce créneau à Outlook ou à votre calendrier.</p>
+            <a class="btn secondary" href="invitation.php?id=<?= (int) $slot['id'] ?>">Ajouter à mon calendrier (.ics)</a>
+        </div>
+    <?php endif; ?>
+
     <?php if (strtotime($slot['start_at']) <= time()): ?>
         <div class="alert info">Les inscriptions à ce créneau sont closes.</div>
     <?php elseif ((int) $slot['registered'] >= (int) $slot['capacity']): ?>
