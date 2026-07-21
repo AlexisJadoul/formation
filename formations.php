@@ -9,13 +9,18 @@ $stmt = db()->query("
     ORDER BY ts.start_at ASC
 ");
 $slots = $stmt->fetchAll();
+$isAdmin = is_admin();
 
 render_header('Créneaux de formation');
 ?>
 <div class="page-title">
     <div>
         <h1>Créneaux de formation</h1>
-        <p>Consultez les créneaux proposés et inscrivez-vous avec votre adresse e-mail, sans créer de compte.</p>
+        <?php if ($isAdmin): ?>
+            <p>Consultez les créneaux proposés et leur taux de remplissage.</p>
+        <?php else: ?>
+            <p>Consultez les créneaux proposés et inscrivez-vous avec votre adresse e-mail, sans créer de compte.</p>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -35,7 +40,9 @@ render_header('Créneaux de formation');
                 Places : <?= (int) $slot['registered'] ?> / <?= (int) $slot['capacity'] ?>
             </div>
 
-            <a class="btn small secondary" href="formation_view.php?id=<?= (int) $slot['id'] ?>">Voir la formation et m’inscrire</a>
+            <a class="btn small secondary" href="formation_view.php?id=<?= (int) $slot['id'] ?>">
+                <?= $isAdmin ? 'Voir la formation' : 'Voir la formation et m’inscrire' ?>
+            </a>
         </article>
     <?php endforeach; ?>
 </div>
