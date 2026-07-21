@@ -124,6 +124,7 @@ nav a:hover {
     padding: 12px 18px;
     background: var(--primary);
     color: #fff;
+    font: inherit;
     font-weight: 700;
     cursor: pointer;
     text-decoration: none;
