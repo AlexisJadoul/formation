@@ -320,6 +320,18 @@ textarea {
     color: var(--danger);
 }
 
+.calendar-invitation {
+    margin: 20px 0;
+    padding: 16px;
+    border: 1px solid #a9d7de;
+    border-radius: 12px;
+    background: var(--primary-soft);
+}
+
+.calendar-invitation p {
+    margin: 0;
+}
+
 .alert.info {
     background: var(--primary-soft);
     color: var(--primary-dark);
