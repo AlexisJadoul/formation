@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/includes/layout.php';
+$user = current_user();
 $stmt = db()->query("
     SELECT tr.*, (SELECT COUNT(*) FROM request_interests ri WHERE ri.request_id = tr.id) AS interested
     FROM training_requests tr
@@ -33,7 +34,7 @@ render_header('Demandes de formation');
                     <?= (int) $request['interested'] ?> personne(s) intéressée(s)
                 </div>
 
-                <?php if ($request['admin_comment']): ?>
+                <?php if (is_admin($user) && $request['admin_comment']): ?>
                     <p class="admin-comment">Commentaire admin : <?= e($request['admin_comment']) ?></p>
                 <?php endif; ?>
             </div>

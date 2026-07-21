@@ -8,6 +8,7 @@ Site PHP/MySQL simple proposé en consultation publique pour :
 - permettre à chaque visiteur de s’inscrire à un créneau disponible ou de signaler son intérêt lorsqu’il est complet ;
 - permettre à chaque visiteur de signaler son intérêt pour une demande de formation validée ;
 - permettre aux administrateurs de consulter les adresses e-mail des inscrits et des personnes intéressées pour chaque créneau.
+- afficher aux administrateurs connectés les commentaires internes associés aux demandes validées.
 
 La création publique de compte et le vote sont désactivés. La création de demandes, l’inscription aux créneaux et la déclaration d’intérêt restent publiques. Seuls les administrateurs disposent d’un compte et peuvent se connecter pour accéder aux écrans de gestion.
 
@@ -26,4 +27,4 @@ Pour mettre à jour une installation existante, exécuter une seule fois `migrat
 
 Une fois installé, `index.php` ouvre directement le tableau de bord public. Les visiteurs peuvent naviguer sur l’accueil, consulter les demandes validées, créer une demande, voir les créneaux, ouvrir leur détail et inscrire un participant sans créer de compte ni se connecter. La création d’une demande nécessite uniquement une adresse e-mail, qui identifie son auteur et reste visible seulement par les administrateurs. Les adresses e-mail demandées dans les parcours publics sont saisies dans une fenêtre dédiée. L’adresse e-mail identifie son inscription, empêche une double inscription au même créneau et n’est jamais affichée sur les pages publiques.
 
-La création publique de compte et le vote sont désactivés. La connexion est réservée aux administrateurs, et les pages de gestion restent protégées afin de ne pas exposer les données privées ni les actions administratives.
+La création publique de compte et le vote sont désactivés. La connexion est réservée aux administrateurs, et les pages de gestion restent protégées afin de ne pas exposer les données privées ni les actions administratives. Sur la page publique des demandes, les commentaires administratifs ne sont affichés que lorsqu’un administrateur est connecté.
