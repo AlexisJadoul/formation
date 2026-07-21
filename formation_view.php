@@ -94,7 +94,9 @@ render_header($slot['title']);
         </div>
     <?php endif; ?>
 
-    <?php if (strtotime($slot['start_at']) <= time()): ?>
+    <?php if ($isAdmin): ?>
+        <div class="alert info">Les inscriptions sont accessibles uniquement depuis l’accès public.</div>
+    <?php elseif (strtotime($slot['start_at']) <= time()): ?>
         <div class="alert info">Les inscriptions à ce créneau sont closes.</div>
     <?php elseif ((int) $slot['registered'] >= (int) $slot['capacity']): ?>
         <div class="alert info">Ce créneau est complet. Vous pouvez signaler votre intérêt pour être recontacté.</div>

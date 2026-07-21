@@ -5,6 +5,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     redirect('formations.php');
 }
 
+if (is_admin()) {
+    flash('Les administrateurs ne peuvent pas s’inscrire à une formation.', 'error');
+    redirect('formations.php');
+}
+
 $slotId = (int) ($_POST['slot_id'] ?? 0);
 $email = mb_strtolower(trim($_POST['participant_email'] ?? ''));
 
