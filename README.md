@@ -6,7 +6,7 @@ Site PHP/MySQL simple proposé en consultation publique pour :
 - consulter le détail de chaque créneau sans compte ni connexion ;
 - permettre à chaque visiteur de créer une demande de formation avec sa seule adresse e-mail, sans connexion ;
 - permettre à chaque visiteur de s’inscrire à un créneau disponible ou de signaler son intérêt lorsqu’il est complet ;
-- proposer après l’inscription une invitation `.ics` compatible avec Outlook et les principaux calendriers ;
+- proposer après l’inscription l’ajout du créneau dans Outlook en ligne, sans téléchargement ni ouverture de l’application de bureau ;
 - permettre à chaque visiteur de signaler son intérêt pour une demande de formation validée ;
 - permettre aux administrateurs de consulter les adresses e-mail des inscrits et des personnes intéressées pour chaque créneau.
 - afficher aux administrateurs connectés les commentaires internes associés aux demandes validées.

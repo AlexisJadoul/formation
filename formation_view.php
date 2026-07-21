@@ -17,6 +17,16 @@ if (!$slot) {
     exit('Créneau introuvable.');
 }
 
+$outlookUrl = 'https://outlook.office.com/calendar/0/deeplink/compose?' . http_build_query([
+    'path' => '/calendar/action/compose',
+    'rru' => 'addevent',
+    'startdt' => date('Y-m-d\TH:i:s', strtotime($slot['start_at'])),
+    'enddt' => date('Y-m-d\TH:i:s', strtotime($slot['end_at'])),
+    'subject' => $slot['title'],
+    'body' => $slot['description'],
+    'location' => $slot['location'],
+], '', '&', PHP_QUERY_RFC3986);
+
 render_header($slot['title']);
 ?>
 <article class="card">
@@ -40,8 +50,8 @@ render_header($slot['title']);
 
     <?php if ((int) ($_SESSION['calendar_slot_id'] ?? 0) === (int) $slot['id']): ?>
         <div class="calendar-invitation">
-            <p><strong>Votre inscription est confirmée.</strong> Téléchargez l’invitation pour ajouter ce créneau à Outlook ou à votre calendrier.</p>
-            <a class="btn secondary" href="invitation.php?id=<?= (int) $slot['id'] ?>">Ajouter à mon calendrier (.ics)</a>
+            <p><strong>Votre inscription est confirmée.</strong> Ajoutez maintenant ce créneau dans Outlook, sans téléchargement.</p>
+            <a class="btn" href="<?= e($outlookUrl) ?>" target="_blank" rel="noopener noreferrer">Ajouter dans Outlook en ligne</a>
         </div>
     <?php endif; ?>
 
