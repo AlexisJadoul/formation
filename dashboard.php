@@ -85,18 +85,23 @@ render_header('Tableau de bord');
         <?php endforeach; ?>
     </div>
 
-    <div class="card">
+    <div class="card dashboard-panel">
         <h2>Prochains créneaux</h2>
         <?php if (!$nextSlots): ?>
             <p>Aucun créneau à venir.</p>
         <?php endif; ?>
         <?php foreach ($nextSlots as $slot): ?>
-            <a class="list-item dashboard-list-link" href="formation_view.php?id=<?= (int) $slot['id'] ?>" aria-label="Consulter le créneau <?= e($slot['title']) ?>">
-                <h3><?= e($slot['title']) ?></h3>
+            <article class="dashboard-request-card">
+                <a class="dashboard-request-details" href="formation_view.php?id=<?= (int) $slot['id'] ?>" aria-label="Consulter le créneau <?= e($slot['title']) ?>">
+                    <h3><?= e($slot['title']) ?></h3>
+                    <span class="dashboard-request-arrow" aria-hidden="true">→</span>
+                </a>
                 <p><?= date('d/m/Y H:i', strtotime($slot['start_at'])) ?> - <?= date('H:i', strtotime($slot['end_at'])) ?></p>
-                <span class="badge"><?= (int) $slot['registered'] ?> / <?= (int) $slot['capacity'] ?> inscrit(s)</span>
-                <span class="list-item-action">Voir le créneau et s’inscrire <span aria-hidden="true">→</span></span>
-            </a>
+                <div class="dashboard-request-footer">
+                    <span class="badge"><?= (int) $slot['registered'] ?> / <?= (int) $slot['capacity'] ?> inscrit(s)</span>
+                    <a class="btn small secondary" href="formation_view.php?id=<?= (int) $slot['id'] ?>">Voir et s’inscrire</a>
+                </div>
+            </article>
         <?php endforeach; ?>
     </div>
 </section>
