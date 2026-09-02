@@ -12,6 +12,39 @@ if (!$slot) {
     exit('Créneau introuvable.');
 }
 
+$errors = [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $location = trim($_POST['location'] ?? '');
+    $capacity = filter_var($_POST['capacity'] ?? null, FILTER_VALIDATE_INT);
+
+    if (!csrf_is_valid($_POST['csrf_token'] ?? null)) {
+        $errors[] = 'Le formulaire a expiré. Veuillez réessayer.';
+    }
+
+    if ($capacity === false || $capacity < 1) {
+        $errors[] = 'La capacité doit être supérieure à 0.';
+    }
+
+    $stmt = db()->prepare("SELECT COUNT(*) FROM slot_registrations WHERE slot_id = ? AND status = 'registered'");
+    $stmt->execute([$id]);
+    $registrationCount = (int) $stmt->fetchColumn();
+
+    if ($capacity !== false && $capacity < $registrationCount) {
+        $errors[] = 'La capacité ne peut pas être inférieure au nombre de participants déjà inscrits (' . $registrationCount . ').';
+    }
+
+    if (!$errors) {
+        $stmt = db()->prepare('UPDATE training_slots SET location = ?, capacity = ?, updated_at = NOW() WHERE id = ?');
+        $stmt->execute([$location, $capacity, $id]);
+        flash('Le lieu et la capacité du créneau ont été modifiés.');
+        redirect('admin_formation_view.php?id=' . $id);
+    }
+
+    $slot['location'] = $location;
+    $slot['capacity'] = $capacity === false ? ($_POST['capacity'] ?? '') : $capacity;
+}
+
 $stmt = db()->prepare("
     SELECT participant_email, created_at
     FROM slot_registrations
@@ -34,9 +67,36 @@ render_header('Participants - ' . $slot['title']);
     </div>
     <div class="table-actions">
         <a class="btn small secondary" href="formation_view.php?id=<?= (int) $slot['id'] ?>">Voir la page publique</a>
+        <a class="btn small secondary" href="#modifier-creneau">Modifier le créneau</a>
         <a class="btn small" href="admin_formations.php">Retour aux créneaux</a>
     </div>
 </div>
+
+<section class="card form-card" id="modifier-creneau">
+    <h2>Modifier le lieu ou la capacité</h2>
+    <p class="small">Vous pouvez mettre à jour ces informations même lorsque le créneau est déjà organisé.</p>
+
+    <?php foreach ($errors as $error): ?>
+        <div class="alert error"><?= e($error) ?></div>
+    <?php endforeach; ?>
+
+    <form method="post">
+        <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
+
+        <div class="grid two compact">
+            <div>
+                <label for="location">Lieu</label>
+                <input id="location" type="text" name="location" value="<?= e($slot['location']) ?>">
+            </div>
+            <div>
+                <label for="capacity">Nombre de places</label>
+                <input id="capacity" type="number" name="capacity" min="<?= max(1, count($registrations)) ?>" value="<?= e((string) $slot['capacity']) ?>" required>
+            </div>
+        </div>
+
+        <button class="btn" type="submit">Enregistrer les modifications</button>
+    </form>
+</section>
 
 <div class="grid two participant-lists">
     <section class="card">
