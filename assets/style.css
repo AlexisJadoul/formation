@@ -192,6 +192,24 @@ select:focus-visible {
     gap: 12px;
 }
 
+.description-details {
+    margin: 22px 0;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #f8fbfc;
+}
+
+.description-details legend {
+    padding: 0 8px;
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+
+.description-details .small {
+    margin-top: 0;
+}
+
 .page-title {
     display: flex;
     align-items: flex-start;
