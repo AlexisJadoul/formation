@@ -192,20 +192,6 @@ select:focus-visible {
     gap: 12px;
 }
 
-.stats {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.stats .card strong {
-    display: block;
-    font-size: 34px;
-    color: var(--primary-dark);
-}
-
-.stats .card span {
-    color: var(--muted);
-}
-
 .page-title {
     display: flex;
     align-items: flex-start;
@@ -534,7 +520,6 @@ th {
     }
 
     .grid.two,
-    .stats,
     .request-card,
     .request-card.admin {
         grid-template-columns: 1fr;
