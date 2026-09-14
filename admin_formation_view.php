@@ -14,6 +14,31 @@ if (!$slot) {
 
 $errors = [];
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_registration_id'])) {
+    $registrationId = (int) $_POST['cancel_registration_id'];
+
+    if (!csrf_is_valid($_POST['csrf_token'] ?? null)) {
+        flash('Le formulaire a expiré. Veuillez réessayer.', 'error');
+    } elseif ($registrationId < 1) {
+        flash('Cette inscription est introuvable.', 'error');
+    } else {
+        $stmt = db()->prepare("
+            UPDATE slot_registrations
+            SET status = 'cancelled'
+            WHERE id = ? AND slot_id = ? AND status = 'registered'
+        ");
+        $stmt->execute([$registrationId, $id]);
+
+        if ($stmt->rowCount() === 1) {
+            flash('Le désistement a été enregistré et la place est de nouveau disponible.');
+        } else {
+            flash('Cette inscription est introuvable ou a déjà été supprimée.', 'error');
+        }
+    }
+
+    redirect('admin_formation_view.php?id=' . $id);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $location = trim($_POST['location'] ?? '');
     $capacity = filter_var($_POST['capacity'] ?? null, FILTER_VALIDATE_INT);
@@ -46,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $stmt = db()->prepare("
-    SELECT participant_email, created_at
+    SELECT id, participant_email, created_at
     FROM slot_registrations
     WHERE slot_id = ? AND status = 'registered'
     ORDER BY created_at ASC
@@ -106,12 +131,19 @@ render_header('Participants - ' . $slot['title']);
             <p>Aucune inscription pour le moment.</p>
         <?php else: ?>
             <table>
-                <thead><tr><th>Adresse e-mail</th><th>Inscrit le</th></tr></thead>
+                <thead><tr><th>Adresse e-mail</th><th>Inscrit le</th><th>Action</th></tr></thead>
                 <tbody>
                     <?php foreach ($registrations as $registration): ?>
                         <tr>
                             <td><a href="mailto:<?= e($registration['participant_email']) ?>"><?= e($registration['participant_email']) ?></a></td>
                             <td><?= date('d/m/Y H:i', strtotime($registration['created_at'])) ?></td>
+                            <td>
+                                <form class="participant-cancellation-form" method="post" onsubmit="return confirm('Confirmer le désistement de cette personne ?');">
+                                    <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
+                                    <input type="hidden" name="cancel_registration_id" value="<?= (int) $registration['id'] ?>">
+                                    <button class="btn small danger" type="submit" aria-label="Supprimer l’inscription de <?= e($registration['participant_email']) ?>">Supprimer</button>
+                                </form>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

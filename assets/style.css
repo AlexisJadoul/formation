@@ -578,6 +578,14 @@ th {
     font-size: 14px;
 }
 
+.participant-cancellation-form {
+    margin: 0;
+}
+
+.participant-cancellation-form .btn {
+    margin-top: 0;
+}
+
 @media (max-width: 820px) {
     .participant-lists table {
         display: block;
