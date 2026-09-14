@@ -21,12 +21,11 @@ function render_header(string $title): void
         </div>
         <nav>
             <a href="dashboard.php">Accueil</a>
-            <a href="demandes.php">Demandes</a>
-            <a href="demande_create.php">Créer une demande</a>
             <a href="formations.php">Créneaux</a>
+            <a href="demandes.php">Demandes</a>
             <?php if (is_admin($user)): ?>
-                <a href="admin_demandes.php">Gérer les demandes</a>
                 <a href="admin_formations.php">Gérer les créneaux</a>
+                <a href="admin_demandes.php">Gérer les demandes</a>
                 <a href="logout.php">Déconnexion</a>
                 <span class="visitor-badge">Administrateur</span>
             <?php else: ?>
