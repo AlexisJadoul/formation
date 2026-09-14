@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/includes/layout.php';
+require_once __DIR__ . '/includes/training.php';
 $user = require_admin();
 
 $id = (int) ($_GET['id'] ?? 0);
@@ -12,6 +13,16 @@ $slot = [
     'end_at' => '',
     'capacity' => 10,
 ];
+
+$descriptionSections = [
+    'target_audience' => 'PUBLIC VISÉ',
+    'prerequisites' => 'PRÉREQUIS',
+    'objectives' => 'OBJECTIFS',
+    'content' => 'CONTENU',
+    'teaching_methods' => 'MÉTHODES PÉDAGOGIQUES',
+];
+
+$sectionValues = array_fill_keys(array_keys($descriptionSections), '');
 
 if ($id > 0) {
     $stmt = db()->prepare('SELECT * FROM training_slots WHERE id = ?');
@@ -37,6 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $slot['end_at'] = $_POST['end_at'] ?? '';
     $slot['capacity'] = (int) ($_POST['capacity'] ?? 0);
 
+    foreach ($descriptionSections as $field => $heading) {
+        $sectionValues[$field] = trim($_POST[$field] ?? '');
+    }
+
     if ($slot['title'] === '' || $slot['description'] === '' || $slot['start_at'] === '' || $slot['end_at'] === '') {
         $errors[] = 'Le titre, la description, la date de début et la date de fin sont obligatoires.';
     }
@@ -48,6 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$errors) {
         $startAt = str_replace('T', ' ', $slot['start_at']) . ':00';
         $endAt = str_replace('T', ' ', $slot['end_at']) . ':00';
+
+        $slot['description'] = append_description_sections($slot['description'], $descriptionSections, $sectionValues);
 
         if ($id > 0) {
             $stmt = db()->prepare('
@@ -110,8 +127,28 @@ render_header($id > 0 ? 'Modifier un créneau' : 'Créer un créneau');
         <label>Titre</label>
         <input type="text" name="title" value="<?= e($slot['title']) ?>" required>
 
-        <label>Description</label>
-        <textarea name="description" rows="7" required><?= e($slot['description']) ?></textarea>
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="7" required><?= e($slot['description']) ?></textarea>
+
+        <fieldset class="description-details">
+            <legend>Informations complémentaires</legend>
+            <p class="small">Ces champs sont facultatifs. Seules les rubriques renseignées seront ajoutées à la description du créneau.</p>
+
+            <label for="target_audience">Public visé</label>
+            <textarea id="target_audience" name="target_audience" rows="3"><?= e($sectionValues['target_audience']) ?></textarea>
+
+            <label for="prerequisites">Prérequis</label>
+            <textarea id="prerequisites" name="prerequisites" rows="3"><?= e($sectionValues['prerequisites']) ?></textarea>
+
+            <label for="objectives">Objectifs</label>
+            <textarea id="objectives" name="objectives" rows="4"><?= e($sectionValues['objectives']) ?></textarea>
+
+            <label for="content">Contenu</label>
+            <textarea id="content" name="content" rows="5"><?= e($sectionValues['content']) ?></textarea>
+
+            <label for="teaching_methods">Méthodes pédagogiques</label>
+            <textarea id="teaching_methods" name="teaching_methods" rows="4"><?= e($sectionValues['teaching_methods']) ?></textarea>
+        </fieldset>
 
         <label>Intervenant</label>
         <input type="text" name="trainer" value="<?= e($slot['trainer']) ?>">
