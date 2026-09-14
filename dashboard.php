@@ -1,10 +1,5 @@
 <?php
 require_once __DIR__ . '/includes/layout.php';
-$stats = [];
-
-$stats['approved_requests'] = db()->query("SELECT COUNT(*) FROM training_requests WHERE status = 'approved'")->fetchColumn();
-$stats['pending_requests'] = db()->query("SELECT COUNT(*) FROM training_requests WHERE status = 'pending'")->fetchColumn();
-$stats['slots'] = db()->query("SELECT COUNT(*) FROM training_slots WHERE start_at >= NOW()")->fetchColumn();
 
 $stmt = db()->query("
     SELECT tr.id, tr.title, tr.description,
@@ -40,12 +35,6 @@ render_header('Tableau de bord');
         <a class="btn secondary" href="demandes.php">Voir les demandes</a>
         <a class="btn secondary" href="formations.php">Voir les créneaux</a>
     </div>
-</section>
-
-<section class="grid stats">
-    <div class="card"><strong><?= (int) $stats['approved_requests'] ?></strong><span>Demandes visibles</span></div>
-    <div class="card"><strong><?= (int) $stats['pending_requests'] ?></strong><span>Demandes en attente</span></div>
-    <div class="card"><strong><?= (int) $stats['slots'] ?></strong><span>Créneaux à venir</span></div>
 </section>
 
 <section class="grid two">
