@@ -46,7 +46,7 @@ function render_footer(): void
     ?>
     </main>
     <footer class="footer">
-        
+        <p>Application développée par la DSI de Redon Agglomération. Une idée d'outil ou de logiciel ? Ouvrez un ticket, nous étudierons votre demande</p>
     </footer>
     <script>
         (function () {
