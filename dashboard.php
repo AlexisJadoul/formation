@@ -39,6 +39,26 @@ render_header('Tableau de bord');
 
 <section class="grid two">
     <div class="card dashboard-panel">
+        <h2>Prochains créneaux</h2>
+        <?php if (!$nextSlots): ?>
+            <p>Aucun créneau à venir.</p>
+        <?php endif; ?>
+        <?php foreach ($nextSlots as $slot): ?>
+            <article class="dashboard-request-card">
+                <a class="dashboard-request-details" href="formation_view.php?id=<?= (int) $slot['id'] ?>" aria-label="Consulter le créneau <?= e($slot['title']) ?>">
+                    <h3><?= e($slot['title']) ?></h3>
+                    <span class="dashboard-request-arrow" aria-hidden="true">→</span>
+                </a>
+                <p><?= date('d/m/Y H:i', strtotime($slot['start_at'])) ?> - <?= date('H:i', strtotime($slot['end_at'])) ?></p>
+                <div class="dashboard-request-footer">
+                    <span class="badge"><?= (int) $slot['registered'] ?> / <?= (int) $slot['capacity'] ?> inscrit(s)</span>
+                    <a class="btn small secondary" href="formation_view.php?id=<?= (int) $slot['id'] ?>">Voir et s’inscrire</a>
+                </div>
+            </article>
+        <?php endforeach; ?>
+    </div>
+
+    <div class="card dashboard-panel">
         <h2>Demandes les plus soutenues</h2>
         <?php if (!$topRequests): ?>
             <p>Aucune demande validée pour le moment.</p>
@@ -74,24 +94,5 @@ render_header('Tableau de bord');
         <?php endforeach; ?>
     </div>
 
-    <div class="card dashboard-panel">
-        <h2>Prochains créneaux</h2>
-        <?php if (!$nextSlots): ?>
-            <p>Aucun créneau à venir.</p>
-        <?php endif; ?>
-        <?php foreach ($nextSlots as $slot): ?>
-            <article class="dashboard-request-card">
-                <a class="dashboard-request-details" href="formation_view.php?id=<?= (int) $slot['id'] ?>" aria-label="Consulter le créneau <?= e($slot['title']) ?>">
-                    <h3><?= e($slot['title']) ?></h3>
-                    <span class="dashboard-request-arrow" aria-hidden="true">→</span>
-                </a>
-                <p><?= date('d/m/Y H:i', strtotime($slot['start_at'])) ?> - <?= date('H:i', strtotime($slot['end_at'])) ?></p>
-                <div class="dashboard-request-footer">
-                    <span class="badge"><?= (int) $slot['registered'] ?> / <?= (int) $slot['capacity'] ?> inscrit(s)</span>
-                    <a class="btn small secondary" href="formation_view.php?id=<?= (int) $slot['id'] ?>">Voir et s’inscrire</a>
-                </div>
-            </article>
-        <?php endforeach; ?>
-    </div>
 </section>
 <?php render_footer(); ?>
