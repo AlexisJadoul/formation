@@ -514,6 +514,148 @@ th {
     padding-left: 20px;
 }
 
+.training-sheet {
+    max-width: 1080px;
+    margin-inline: auto;
+    padding: 0;
+    overflow: hidden;
+}
+
+.training-header {
+    padding: 38px 42px 32px;
+    background: linear-gradient(135deg, #ffffff 20%, var(--primary-soft));
+    border-bottom: 1px solid var(--border);
+}
+
+.training-eyebrow {
+    margin: 0 0 8px;
+    color: var(--primary-dark);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+}
+
+.training-header h1 {
+    position: relative;
+    margin: 0 0 22px;
+    padding-bottom: 14px;
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.15;
+}
+
+.training-header h1::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 74px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--primary);
+}
+
+.training-date {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    color: var(--primary-dark);
+    font-weight: 700;
+}
+
+.training-date-separator {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #8eb9bf;
+}
+
+.training-facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    background: var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.training-fact {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+    padding: 20px 42px;
+    background: #f8fbfc;
+}
+
+.training-fact-label {
+    color: #587177;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.training-content {
+    padding: 34px 42px 42px;
+}
+
+.training-introduction {
+    max-width: 900px;
+    margin-bottom: 34px;
+    color: #29464c;
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.training-introduction p {
+    margin: 0 0 12px;
+}
+
+.training-section {
+    margin-top: 30px;
+}
+
+.training-section h2 {
+    display: inline-block;
+    margin: 0 0 15px;
+    padding-bottom: 6px;
+    border-bottom: 3px solid var(--primary);
+    color: var(--text);
+    font-size: 18px;
+    letter-spacing: .025em;
+}
+
+.training-section p,
+.training-section ul {
+    margin: 0;
+}
+
+.training-section ul {
+    display: grid;
+    gap: 9px;
+    padding: 0;
+    list-style: none;
+}
+
+.training-section li {
+    position: relative;
+    padding-left: 24px;
+}
+
+.training-section li::before {
+    content: "";
+    position: absolute;
+    top: .62em;
+    left: 2px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-soft);
+}
+
 .slot-card {
     display: flex;
     flex-direction: column;
@@ -551,6 +693,19 @@ th {
     .slot-card .btn,
     .request-card .btn {
         width: 100%;
+    }
+
+    .training-header,
+    .training-content {
+        padding: 28px 22px;
+    }
+
+    .training-facts {
+        grid-template-columns: 1fr;
+    }
+
+    .training-fact {
+        padding: 16px 22px;
     }
 }
 

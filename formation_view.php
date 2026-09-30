@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/includes/layout.php';
+require_once __DIR__ . '/includes/training.php';
 $id = (int) ($_GET['id'] ?? 0);
 
 $stmt = db()->prepare("
@@ -41,25 +42,66 @@ $outlookUrl = 'https://outlook.office.com/calendar/0/deeplink/compose?' . http_b
 ], '', '&', PHP_QUERY_RFC3986);
 
 render_header($slot['title']);
+$descriptionSections = parse_training_description($slot['description'], [
+    'PUBLIC VISÉ',
+    'PRÉREQUIS',
+    'OBJECTIFS',
+    'CONTENU',
+    'MÉTHODES PÉDAGOGIQUES',
+]);
 ?>
-<article class="card">
-    <div class="page-title">
-        <div>
-            <h1><?= e($slot['title']) ?></h1>
-            <p class="meta">
-                <?= date('d/m/Y H:i', strtotime($slot['start_at'])) ?> -
-                <?= date('H:i', strtotime($slot['end_at'])) ?>
-            </p>
+<article class="card training-sheet">
+    <header class="training-header">
+        <p class="training-eyebrow">Fiche de formation</p>
+        <h1><?= e($slot['title']) ?></h1>
+        <p class="training-date">
+            <span aria-hidden="true">&#128197;</span>
+            <span><?= date('d/m/Y', strtotime($slot['start_at'])) ?></span>
+            <span class="training-date-separator" aria-hidden="true"></span>
+            <span><?= date('H:i', strtotime($slot['start_at'])) ?> – <?= date('H:i', strtotime($slot['end_at'])) ?></span>
+        </p>
+    </header>
+
+    <div class="training-facts" aria-label="Informations pratiques">
+        <div class="training-fact">
+            <span class="training-fact-label">Intervenant</span>
+            <strong><?= e($slot['trainer'] ?: 'Non précisé') ?></strong>
+        </div>
+        <div class="training-fact">
+            <span class="training-fact-label">Lieu</span>
+            <strong><?= e($slot['location'] ?: 'Non précisé') ?></strong>
+        </div>
+        <div class="training-fact">
+            <span class="training-fact-label">Places occupées</span>
+            <strong><?= (int) $slot['registered'] ?> sur <?= (int) $slot['capacity'] ?></strong>
         </div>
     </div>
 
-    <p><?= nl2br(e($slot['description'])) ?></p>
-
-    <ul class="details">
-        <li><strong>Intervenant :</strong> <?= e($slot['trainer'] ?: 'Non précisé') ?></li>
-        <li><strong>Lieu :</strong> <?= e($slot['location'] ?: 'Non précisé') ?></li>
-        <li><strong>Capacité :</strong> <?= (int) $slot['registered'] ?> / <?= (int) $slot['capacity'] ?> inscrit(s)</li>
-    </ul>
+    <div class="training-content">
+        <?php foreach ($descriptionSections as $section): ?>
+            <?php if ($section['heading'] === null): ?>
+                <div class="training-introduction">
+                    <?php foreach ($section['lines'] as $line): ?>
+                        <?php if (trim($line) !== ''): ?><p><?= e(trim($line)) ?></p><?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <section class="training-section">
+                    <h2><?= e($section['heading']) ?></h2>
+                    <?php $contentLines = array_values(array_filter(array_map('trim', $section['lines']), static fn ($line) => $line !== '')); ?>
+                    <?php if (count($contentLines) > 1): ?>
+                        <ul>
+                            <?php foreach ($contentLines as $line): ?>
+                                <li><?= e(ltrim($line, "-–• \t")) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php elseif ($contentLines): ?>
+                        <p><?= e($contentLines[0]) ?></p>
+                    <?php endif; ?>
+                </section>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
 
     <?php if ($isAdmin): ?>
         <section class="admin-participants">
