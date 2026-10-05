@@ -53,9 +53,16 @@ a:hover {
 }
 
 .brand a {
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--text);
+    display: flex;
+    align-items: center;
+}
+
+.brand img {
+    display: block;
+    width: auto;
+    height: 52px;
+    max-width: min(280px, 40vw);
+    object-fit: contain;
 }
 
 nav {
