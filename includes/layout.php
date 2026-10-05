@@ -17,7 +17,9 @@ function render_header(string $title): void
     <body>
     <header class="topbar">
         <div class="brand">
-            <a href="dashboard.php"><?= e(APP_NAME) ?></a>
+            <a href="dashboard.php" aria-label="<?= e(APP_NAME) ?>">
+                <img src="https://logo.redon-agglomeration.bzh/formation/logo.png" alt="<?= e(APP_NAME) ?>">
+            </a>
         </div>
         <nav>
             <a href="dashboard.php">Accueil</a>
