@@ -56,6 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Le titre, la description, la date de début et la date de fin sont obligatoires.';
     }
 
+    if (($slot['start_at'] !== '' && !is_half_hour_datetime($slot['start_at']))
+        || ($slot['end_at'] !== '' && !is_half_hour_datetime($slot['end_at']))) {
+        $errors[] = 'Les heures de début et de fin doivent être choisies par tranches de 30 minutes.';
+    }
+
     if ($slot['capacity'] < 1) {
         $errors[] = 'La capacité doit être supérieure à 0.';
     }
@@ -159,11 +164,11 @@ render_header($id > 0 ? 'Modifier un créneau' : 'Créer un créneau');
         <div class="grid two compact">
             <div>
                 <label>Début</label>
-                <input type="datetime-local" name="start_at" value="<?= e(datetime_input_value($slot['start_at'])) ?>" required>
+                <input type="datetime-local" name="start_at" value="<?= e(datetime_input_value($slot['start_at'])) ?>" step="1800" required>
             </div>
             <div>
                 <label>Fin</label>
-                <input type="datetime-local" name="end_at" value="<?= e(datetime_input_value($slot['end_at'])) ?>" required>
+                <input type="datetime-local" name="end_at" value="<?= e(datetime_input_value($slot['end_at'])) ?>" step="1800" required>
             </div>
         </div>
 
