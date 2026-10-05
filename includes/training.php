@@ -11,6 +11,18 @@ function is_half_hour_datetime(string $value): bool
     return $date !== false && $date->format('Y-m-d\TH:i') === $value;
 }
 
+function half_hour_times(): array
+{
+    $times = [];
+
+    for ($hour = 0; $hour < 24; $hour++) {
+        $times[] = sprintf('%02d:00', $hour);
+        $times[] = sprintf('%02d:30', $hour);
+    }
+
+    return $times;
+}
+
 function append_description_sections(string $description, array $sections, array $values): string
 {
     $descriptionParts = [trim($description)];
