@@ -1,5 +1,16 @@
 <?php
 
+function is_half_hour_datetime(string $value): bool
+{
+    if (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:(?:00|30)$/', $value) !== 1) {
+        return false;
+    }
+
+    $date = DateTimeImmutable::createFromFormat('!Y-m-d\TH:i', $value);
+
+    return $date !== false && $date->format('Y-m-d\TH:i') === $value;
+}
+
 function append_description_sections(string $description, array $sections, array $values): string
 {
     $descriptionParts = [trim($description)];
