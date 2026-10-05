@@ -35,6 +35,10 @@ if ($id > 0) {
     }
 
     $slot = $found;
+
+    $extractedDescription = extract_description_sections($slot['description'], $descriptionSections);
+    $slot['description'] = $extractedDescription['description'];
+    $sectionValues = $extractedDescription['sections'];
 }
 
 $errors = [];

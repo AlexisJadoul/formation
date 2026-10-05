@@ -37,6 +37,51 @@ function append_description_sections(string $description, array $sections, array
     return implode("\n\n", $descriptionParts);
 }
 
+function extract_description_sections(string $description, array $sectionHeadings): array
+{
+    $values = array_fill_keys(array_keys($sectionHeadings), '');
+    $headingFields = [];
+
+    foreach ($sectionHeadings as $field => $heading) {
+        $headingFields[mb_strtoupper(trim($heading), 'UTF-8')] = $field;
+    }
+
+    $descriptionLines = [];
+    $currentField = null;
+    $sectionLines = [];
+
+    $storeCurrentSection = static function () use (&$values, &$currentField, &$sectionLines): void {
+        if ($currentField !== null) {
+            $values[$currentField] = trim(implode("\n", $sectionLines));
+        }
+
+        $sectionLines = [];
+    };
+
+    foreach (preg_split('/\R/', trim($description)) as $line) {
+        $normalizedLine = mb_strtoupper(rtrim(trim($line), ':'), 'UTF-8');
+
+        if (isset($headingFields[$normalizedLine])) {
+            $storeCurrentSection();
+            $currentField = $headingFields[$normalizedLine];
+            continue;
+        }
+
+        if ($currentField === null) {
+            $descriptionLines[] = $line;
+        } else {
+            $sectionLines[] = $line;
+        }
+    }
+
+    $storeCurrentSection();
+
+    return [
+        'description' => trim(implode("\n", $descriptionLines)),
+        'sections' => $values,
+    ];
+}
+
 function parse_training_description(string $description, array $sectionHeadings): array
 {
     $sections = [];
