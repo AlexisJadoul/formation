@@ -423,6 +423,35 @@ select:focus-visible {
     max-width: 850px;
 }
 
+.datetime-range {
+    margin-top: 14px;
+}
+
+.datetime-field {
+    min-width: 0;
+    margin: 0;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.datetime-field legend {
+    padding: 0 6px;
+    font-weight: 700;
+}
+
+.datetime-field label {
+    margin-top: 0;
+}
+
+.datetime-parts {
+    grid-template-columns: minmax(0, 3fr) minmax(110px, 2fr);
+}
+
+.datetime-help {
+    margin: 6px 0 0;
+}
+
 label {
     display: block;
     margin: 14px 0 6px;

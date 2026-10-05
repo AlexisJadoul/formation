@@ -44,8 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $slot['description'] = trim($_POST['description'] ?? '');
     $slot['trainer'] = trim($_POST['trainer'] ?? '');
     $slot['location'] = trim($_POST['location'] ?? '');
-    $slot['start_at'] = $_POST['start_at'] ?? '';
-    $slot['end_at'] = $_POST['end_at'] ?? '';
+    $slot['start_at'] = submitted_datetime_value($_POST['start_date'] ?? '', $_POST['start_time'] ?? '');
+    $slot['end_at'] = submitted_datetime_value($_POST['end_date'] ?? '', $_POST['end_time'] ?? '');
     $slot['capacity'] = (int) ($_POST['capacity'] ?? 0);
 
     foreach ($descriptionSections as $field => $heading) {
@@ -119,6 +119,39 @@ function datetime_input_value(?string $value): string
     return date('Y-m-d\TH:i', strtotime($value));
 }
 
+function submitted_datetime_value(string $date, string $time): string
+{
+    if ($date === '' || $time === '') {
+        return '';
+    }
+
+    return $date . 'T' . $time;
+}
+
+function datetime_date_value(?string $value): string
+{
+    $datetime = datetime_input_value($value);
+
+    return $datetime === '' ? '' : substr($datetime, 0, 10);
+}
+
+function datetime_time_value(?string $value): string
+{
+    $datetime = datetime_input_value($value);
+
+    return $datetime === '' ? '' : substr($datetime, 11, 5);
+}
+
+function render_time_options(?string $selectedTime): void
+{
+    echo '<option value="">Choisir une heure</option>';
+
+    foreach (half_hour_times() as $time) {
+        $selected = $time === $selectedTime ? ' selected' : '';
+        echo '<option value="' . e($time) . '"' . $selected . '>' . e($time) . '</option>';
+    }
+}
+
 render_header($id > 0 ? 'Modifier un créneau' : 'Créer un créneau');
 ?>
 <div class="card form-card">
@@ -161,16 +194,39 @@ render_header($id > 0 ? 'Modifier un créneau' : 'Créer un créneau');
         <label>Lieu</label>
         <input type="text" name="location" value="<?= e($slot['location']) ?>">
 
-        <div class="grid two compact">
-            <div>
-                <label>Début</label>
-                <input type="datetime-local" name="start_at" value="<?= e(datetime_input_value($slot['start_at'])) ?>" step="1800" required>
-            </div>
-            <div>
-                <label>Fin</label>
-                <input type="datetime-local" name="end_at" value="<?= e(datetime_input_value($slot['end_at'])) ?>" step="1800" required>
-            </div>
+        <div class="grid two compact datetime-range">
+            <fieldset class="datetime-field">
+                <legend>Début</legend>
+                <div class="grid datetime-parts compact">
+                    <div>
+                        <label for="start_date">Date</label>
+                        <input type="date" id="start_date" name="start_date" value="<?= e(datetime_date_value($slot['start_at'])) ?>" required>
+                    </div>
+                    <div>
+                        <label for="start_time">Heure</label>
+                        <select id="start_time" name="start_time" required>
+                            <?php render_time_options(datetime_time_value($slot['start_at'])); ?>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="datetime-field">
+                <legend>Fin</legend>
+                <div class="grid datetime-parts compact">
+                    <div>
+                        <label for="end_date">Date</label>
+                        <input type="date" id="end_date" name="end_date" value="<?= e(datetime_date_value($slot['end_at'])) ?>" required>
+                    </div>
+                    <div>
+                        <label for="end_time">Heure</label>
+                        <select id="end_time" name="end_time" required>
+                            <?php render_time_options(datetime_time_value($slot['end_at'])); ?>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
         </div>
+        <p class="small datetime-help">Les horaires sont proposés uniquement à l’heure pile ou à la demi-heure.</p>
 
         <label>Nombre de places</label>
         <input type="number" name="capacity" min="1" value="<?= (int) $slot['capacity'] ?>" required>
