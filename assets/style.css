@@ -649,6 +649,10 @@ th {
     padding: 34px 42px 42px;
 }
 
+.admin-participants {
+    padding: 0 42px 42px;
+}
+
 .training-introduction {
     max-width: 900px;
     margin-bottom: 34px;
@@ -744,7 +748,8 @@ th {
     }
 
     .training-header,
-    .training-content {
+    .training-content,
+    .admin-participants {
         padding: 28px 22px;
     }
 
