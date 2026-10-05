@@ -12,6 +12,7 @@ function render_header(string $title): void
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?= e($title) ?> - <?= e(APP_NAME) ?></title>
+        <link rel="icon" type="image/png" href="https://logo.redon-agglomeration.bzh/formation/logo.png">
         <link rel="stylesheet" href="assets/style.css">
     </head>
     <body>

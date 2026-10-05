@@ -129,6 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$errors) {
 <head>
     <meta charset="utf-8">
     <title>Installation</title>
+    <link rel="icon" type="image/png" href="https://logo.redon-agglomeration.bzh/formation/logo.png">
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
